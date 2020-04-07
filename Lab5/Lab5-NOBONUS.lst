@@ -1,0 +1,3069 @@
+0000              1   ;--------------------------------------------------------
+0000              2   ; File Created by C51
+0000              3   ; Version 1.0.0 #1069 (Apr 23 2015) (MSVC)
+0000              4   ; This file was generated Mon Mar 02 12:00:19 2020
+0000              5   ;--------------------------------------------------------
+                  5   $name Lab5_NOBONUS
+                  6   $optc51 --model-small
+                  7   $printf_float
+0000              9            R_DSEG    segment data
+0000             10            R_CSEG    segment code
+0000             11            R_BSEG    segment bit
+0000             12            R_XSEG    segment xdata
+0000             13            R_PSEG    segment xdata
+0000             14            R_ISEG    segment idata
+0000             15            R_OSEG    segment data overlay
+0000             16            BIT_BANK  segment data overlay
+0000             17            R_HOME    segment code
+0000             18            R_GSINIT  segment code
+0000             19            R_IXSEG   segment xdata
+0000             20            R_CONST   segment code
+0000             21            R_XINIT   segment code
+0000             22            R_DINIT   segment code
+0000             23   
+0000             24   ;--------------------------------------------------------
+0000             25   ; Public variables in this module
+0000             26   ;--------------------------------------------------------
+0000             27            public _InitPinADC_PARM_2
+0000             28            public _main
+0000             29            public _Get_ADC
+0000             30            public _getsn
+0000             31            public _LCDprint
+0000             32            public _LCD_4BIT
+0000             33            public _WriteCommand
+0000             34            public _WriteData
+0000             35            public _LCD_byte
+0000             36            public _LCD_pulse
+0000             37            public _TIMER0_Init
+0000             38            public _Volts_at_Pin
+0000             39            public _ADC_at_Pin
+0000             40            public _InitPinADC
+0000             41            public _waitms
+0000             42            public _Timer3us
+0000             43            public _InitADC
+0000             44            public __c51_external_startup
+0000             45            public _LCDprint_PARM_3
+0000             46            public _getsn_PARM_2
+0000             47            public _LCDprint_PARM_2
+0000             48   ;--------------------------------------------------------
+0000             49   ; Special Function Registers
+0000             50   ;--------------------------------------------------------
+0000             51   _ACC            DATA 0xe0
+0000             52   _ADC0ASAH       DATA 0xb6
+0000             53   _ADC0ASAL       DATA 0xb5
+0000             54   _ADC0ASCF       DATA 0xa1
+0000             55   _ADC0ASCT       DATA 0xc7
+0000             56   _ADC0CF0        DATA 0xbc
+0000             57   _ADC0CF1        DATA 0xb9
+0000             58   _ADC0CF2        DATA 0xdf
+0000             59   _ADC0CN0        DATA 0xe8
+0000             60   _ADC0CN1        DATA 0xb2
+0000             61   _ADC0CN2        DATA 0xb3
+0000             62   _ADC0GTH        DATA 0xc4
+0000             63   _ADC0GTL        DATA 0xc3
+0000             64   _ADC0H          DATA 0xbe
+0000             65   _ADC0L          DATA 0xbd
+0000             66   _ADC0LTH        DATA 0xc6
+0000             67   _ADC0LTL        DATA 0xc5
+0000             68   _ADC0MX         DATA 0xbb
+0000             69   _B              DATA 0xf0
+0000             70   _CKCON0         DATA 0x8e
+0000             71   _CKCON1         DATA 0xa6
+0000             72   _CLEN0          DATA 0xc6
+0000             73   _CLIE0          DATA 0xc7
+0000             74   _CLIF0          DATA 0xe8
+0000             75   _CLKSEL         DATA 0xa9
+0000             76   _CLOUT0         DATA 0xd1
+0000             77   _CLU0CF         DATA 0xb1
+0000             78   _CLU0FN         DATA 0xaf
+0000             79   _CLU0MX         DATA 0x84
+0000             80   _CLU1CF         DATA 0xb3
+0000             81   _CLU1FN         DATA 0xb2
+0000             82   _CLU1MX         DATA 0x85
+0000             83   _CLU2CF         DATA 0xb6
+0000             84   _CLU2FN         DATA 0xb5
+0000             85   _CLU2MX         DATA 0x91
+0000             86   _CLU3CF         DATA 0xbf
+0000             87   _CLU3FN         DATA 0xbe
+0000             88   _CLU3MX         DATA 0xae
+0000             89   _CMP0CN0        DATA 0x9b
+0000             90   _CMP0CN1        DATA 0x99
+0000             91   _CMP0MD         DATA 0x9d
+0000             92   _CMP0MX         DATA 0x9f
+0000             93   _CMP1CN0        DATA 0xbf
+0000             94   _CMP1CN1        DATA 0xac
+0000             95   _CMP1MD         DATA 0xab
+0000             96   _CMP1MX         DATA 0xaa
+0000             97   _CRC0CN0        DATA 0xce
+0000             98   _CRC0CN1        DATA 0x86
+0000             99   _CRC0CNT        DATA 0xd3
+0000            100   _CRC0DAT        DATA 0xcb
+0000            101   _CRC0FLIP       DATA 0xcf
+0000            102   _CRC0IN         DATA 0xca
+0000            103   _CRC0ST         DATA 0xd2
+0000            104   _DAC0CF0        DATA 0x91
+0000            105   _DAC0CF1        DATA 0x92
+0000            106   _DAC0H          DATA 0x85
+0000            107   _DAC0L          DATA 0x84
+0000            108   _DAC1CF0        DATA 0x93
+0000            109   _DAC1CF1        DATA 0x94
+0000            110   _DAC1H          DATA 0x8a
+0000            111   _DAC1L          DATA 0x89
+0000            112   _DAC2CF0        DATA 0x95
+0000            113   _DAC2CF1        DATA 0x96
+0000            114   _DAC2H          DATA 0x8c
+0000            115   _DAC2L          DATA 0x8b
+0000            116   _DAC3CF0        DATA 0x9a
+0000            117   _DAC3CF1        DATA 0x9c
+0000            118   _DAC3H          DATA 0x8e
+0000            119   _DAC3L          DATA 0x8d
+0000            120   _DACGCF0        DATA 0x88
+0000            121   _DACGCF1        DATA 0x98
+0000            122   _DACGCF2        DATA 0xa2
+0000            123   _DERIVID        DATA 0xad
+0000            124   _DEVICEID       DATA 0xb5
+0000            125   _DPH            DATA 0x83
+0000            126   _DPL            DATA 0x82
+0000            127   _EIE1           DATA 0xe6
+0000            128   _EIE2           DATA 0xf3
+0000            129   _EIP1           DATA 0xbb
+0000            130   _EIP1H          DATA 0xee
+0000            131   _EIP2           DATA 0xed
+0000            132   _EIP2H          DATA 0xf6
+0000            133   _EMI0CN         DATA 0xe7
+0000            134   _FLKEY          DATA 0xb7
+0000            135   _HFO0CAL        DATA 0xc7
+0000            136   _HFO1CAL        DATA 0xd6
+0000            137   _HFOCN          DATA 0xef
+0000            138   _I2C0ADM        DATA 0xff
+0000            139   _I2C0CN0        DATA 0xba
+0000            140   _I2C0DIN        DATA 0xbc
+0000            141   _I2C0DOUT       DATA 0xbb
+0000            142   _I2C0FCN0       DATA 0xad
+0000            143   _I2C0FCN1       DATA 0xab
+0000            144   _I2C0FCT        DATA 0xf5
+0000            145   _I2C0SLAD       DATA 0xbd
+0000            146   _I2C0STAT       DATA 0xb9
+0000            147   _IE             DATA 0xa8
+0000            148   _IP             DATA 0xb8
+0000            149   _IPH            DATA 0xf2
+0000            150   _IT01CF         DATA 0xe4
+0000            151   _LFO0CN         DATA 0xb1
+0000            152   _P0             DATA 0x80
+0000            153   _P0MASK         DATA 0xfe
+0000            154   _P0MAT          DATA 0xfd
+0000            155   _P0MDIN         DATA 0xf1
+0000            156   _P0MDOUT        DATA 0xa4
+0000            157   _P0SKIP         DATA 0xd4
+0000            158   _P1             DATA 0x90
+0000            159   _P1MASK         DATA 0xee
+0000            160   _P1MAT          DATA 0xed
+0000            161   _P1MDIN         DATA 0xf2
+0000            162   _P1MDOUT        DATA 0xa5
+0000            163   _P1SKIP         DATA 0xd5
+0000            164   _P2             DATA 0xa0
+0000            165   _P2MASK         DATA 0xfc
+0000            166   _P2MAT          DATA 0xfb
+0000            167   _P2MDIN         DATA 0xf3
+0000            168   _P2MDOUT        DATA 0xa6
+0000            169   _P2SKIP         DATA 0xcc
+0000            170   _P3             DATA 0xb0
+0000            171   _P3MDIN         DATA 0xf4
+0000            172   _P3MDOUT        DATA 0x9c
+0000            173   _PCA0CENT       DATA 0x9e
+0000            174   _PCA0CLR        DATA 0x9c
+0000            175   _PCA0CN0        DATA 0xd8
+0000            176   _PCA0CPH0       DATA 0xfc
+0000            177   _PCA0CPH1       DATA 0xea
+0000            178   _PCA0CPH2       DATA 0xec
+0000            179   _PCA0CPH3       DATA 0xf5
+0000            180   _PCA0CPH4       DATA 0x85
+0000            181   _PCA0CPH5       DATA 0xde
+0000            182   _PCA0CPL0       DATA 0xfb
+0000            183   _PCA0CPL1       DATA 0xe9
+0000            184   _PCA0CPL2       DATA 0xeb
+0000            185   _PCA0CPL3       DATA 0xf4
+0000            186   _PCA0CPL4       DATA 0x84
+0000            187   _PCA0CPL5       DATA 0xdd
+0000            188   _PCA0CPM0       DATA 0xda
+0000            189   _PCA0CPM1       DATA 0xdb
+0000            190   _PCA0CPM2       DATA 0xdc
+0000            191   _PCA0CPM3       DATA 0xae
+0000            192   _PCA0CPM4       DATA 0xaf
+0000            193   _PCA0CPM5       DATA 0xcc
+0000            194   _PCA0H          DATA 0xfa
+0000            195   _PCA0L          DATA 0xf9
+0000            196   _PCA0MD         DATA 0xd9
+0000            197   _PCA0POL        DATA 0x96
+0000            198   _PCA0PWM        DATA 0xf7
+0000            199   _PCON0          DATA 0x87
+0000            200   _PCON1          DATA 0xcd
+0000            201   _PFE0CN         DATA 0xc1
+0000            202   _PRTDRV         DATA 0xf6
+0000            203   _PSCTL          DATA 0x8f
+0000            204   _PSTAT0         DATA 0xaa
+0000            205   _PSW            DATA 0xd0
+0000            206   _REF0CN         DATA 0xd1
+0000            207   _REG0CN         DATA 0xc9
+0000            208   _REVID          DATA 0xb6
+0000            209   _RSTSRC         DATA 0xef
+0000            210   _SBCON1         DATA 0x94
+0000            211   _SBRLH1         DATA 0x96
+0000            212   _SBRLL1         DATA 0x95
+0000            213   _SBUF           DATA 0x99
+0000            214   _SBUF0          DATA 0x99
+0000            215   _SBUF1          DATA 0x92
+0000            216   _SCON           DATA 0x98
+0000            217   _SCON0          DATA 0x98
+0000            218   _SCON1          DATA 0xc8
+0000            219   _SFRPAGE        DATA 0xa7
+0000            220   _SFRPGCN        DATA 0xbc
+0000            221   _SFRSTACK       DATA 0xd7
+0000            222   _SMB0ADM        DATA 0xd6
+0000            223   _SMB0ADR        DATA 0xd7
+0000            224   _SMB0CF         DATA 0xc1
+0000            225   _SMB0CN0        DATA 0xc0
+0000            226   _SMB0DAT        DATA 0xc2
+0000            227   _SMB0FCN0       DATA 0xc3
+0000            228   _SMB0FCN1       DATA 0xc4
+0000            229   _SMB0FCT        DATA 0xef
+0000            230   _SMB0RXLN       DATA 0xc5
+0000            231   _SMB0TC         DATA 0xac
+0000            232   _SMOD1          DATA 0x93
+0000            233   _SP             DATA 0x81
+0000            234   _SPI0CFG        DATA 0xa1
+0000            235   _SPI0CKR        DATA 0xa2
+0000            236   _SPI0CN0        DATA 0xf8
+0000            237   _SPI0DAT        DATA 0xa3
+0000            238   _SPI0FCN0       DATA 0x9a
+0000            239   _SPI0FCN1       DATA 0x9b
+0000            240   _SPI0FCT        DATA 0xf7
+0000            241   _SPI0PCF        DATA 0xdf
+0000            242   _TCON           DATA 0x88
+0000            243   _TH0            DATA 0x8c
+0000            244   _TH1            DATA 0x8d
+0000            245   _TL0            DATA 0x8a
+0000            246   _TL1            DATA 0x8b
+0000            247   _TMOD           DATA 0x89
+0000            248   _TMR2CN0        DATA 0xc8
+0000            249   _TMR2CN1        DATA 0xfd
+0000            250   _TMR2H          DATA 0xcf
+0000            251   _TMR2L          DATA 0xce
+0000            252   _TMR2RLH        DATA 0xcb
+0000            253   _TMR2RLL        DATA 0xca
+0000            254   _TMR3CN0        DATA 0x91
+0000            255   _TMR3CN1        DATA 0xfe
+0000            256   _TMR3H          DATA 0x95
+0000            257   _TMR3L          DATA 0x94
+0000            258   _TMR3RLH        DATA 0x93
+0000            259   _TMR3RLL        DATA 0x92
+0000            260   _TMR4CN0        DATA 0x98
+0000            261   _TMR4CN1        DATA 0xff
+0000            262   _TMR4H          DATA 0xa5
+0000            263   _TMR4L          DATA 0xa4
+0000            264   _TMR4RLH        DATA 0xa3
+0000            265   _TMR4RLL        DATA 0xa2
+0000            266   _TMR5CN0        DATA 0xc0
+0000            267   _TMR5CN1        DATA 0xf1
+0000            268   _TMR5H          DATA 0xd5
+0000            269   _TMR5L          DATA 0xd4
+0000            270   _TMR5RLH        DATA 0xd3
+0000            271   _TMR5RLL        DATA 0xd2
+0000            272   _UART0PCF       DATA 0xd9
+0000            273   _UART1FCN0      DATA 0x9d
+0000            274   _UART1FCN1      DATA 0xd8
+0000            275   _UART1FCT       DATA 0xfa
+0000            276   _UART1LIN       DATA 0x9e
+0000            277   _UART1PCF       DATA 0xda
+0000            278   _VDM0CN         DATA 0xff
+0000            279   _WDTCN          DATA 0x97
+0000            280   _XBR0           DATA 0xe1
+0000            281   _XBR1           DATA 0xe2
+0000            282   _XBR2           DATA 0xe3
+0000            283   _XOSC0CN        DATA 0x86
+0000            284   _DPTR           DATA 0x8382
+0000            285   _TMR2RL         DATA 0xcbca
+0000            286   _TMR3RL         DATA 0x9392
+0000            287   _TMR4RL         DATA 0xa3a2
+0000            288   _TMR5RL         DATA 0xd3d2
+0000            289   _TMR0           DATA 0x8c8a
+0000            290   _TMR1           DATA 0x8d8b
+0000            291   _TMR2           DATA 0xcfce
+0000            292   _TMR3           DATA 0x9594
+0000            293   _TMR4           DATA 0xa5a4
+0000            294   _TMR5           DATA 0xd5d4
+0000            295   _SBRL1          DATA 0x9695
+0000            296   _PCA0           DATA 0xfaf9
+0000            297   _PCA0CP0        DATA 0xfcfb
+0000            298   _PCA0CP1        DATA 0xeae9
+0000            299   _PCA0CP2        DATA 0xeceb
+0000            300   _PCA0CP3        DATA 0xf5f4
+0000            301   _PCA0CP4        DATA 0x8584
+0000            302   _PCA0CP5        DATA 0xdedd
+0000            303   _ADC0ASA        DATA 0xb6b5
+0000            304   _ADC0GT         DATA 0xc4c3
+0000            305   _ADC0           DATA 0xbebd
+0000            306   _ADC0LT         DATA 0xc6c5
+0000            307   _DAC0           DATA 0x8584
+0000            308   _DAC1           DATA 0x8a89
+0000            309   _DAC2           DATA 0x8c8b
+0000            310   _DAC3           DATA 0x8e8d
+0000            311   ;--------------------------------------------------------
+0000            312   ; special function bits
+0000            313   ;--------------------------------------------------------
+0000            314   _ACC_0          BIT 0xe0
+0000            315   _ACC_1          BIT 0xe1
+0000            316   _ACC_2          BIT 0xe2
+0000            317   _ACC_3          BIT 0xe3
+0000            318   _ACC_4          BIT 0xe4
+0000            319   _ACC_5          BIT 0xe5
+0000            320   _ACC_6          BIT 0xe6
+0000            321   _ACC_7          BIT 0xe7
+0000            322   _TEMPE          BIT 0xe8
+0000            323   _ADGN0          BIT 0xe9
+0000            324   _ADGN1          BIT 0xea
+0000            325   _ADWINT         BIT 0xeb
+0000            326   _ADBUSY         BIT 0xec
+0000            327   _ADINT          BIT 0xed
+0000            328   _IPOEN          BIT 0xee
+0000            329   _ADEN           BIT 0xef
+0000            330   _B_0            BIT 0xf0
+0000            331   _B_1            BIT 0xf1
+0000            332   _B_2            BIT 0xf2
+0000            333   _B_3            BIT 0xf3
+0000            334   _B_4            BIT 0xf4
+0000            335   _B_5            BIT 0xf5
+0000            336   _B_6            BIT 0xf6
+0000            337   _B_7            BIT 0xf7
+0000            338   _C0FIF          BIT 0xe8
+0000            339   _C0RIF          BIT 0xe9
+0000            340   _C1FIF          BIT 0xea
+0000            341   _C1RIF          BIT 0xeb
+0000            342   _C2FIF          BIT 0xec
+0000            343   _C2RIF          BIT 0xed
+0000            344   _C3FIF          BIT 0xee
+0000            345   _C3RIF          BIT 0xef
+0000            346   _D1SRC0         BIT 0x88
+0000            347   _D1SRC1         BIT 0x89
+0000            348   _D1AMEN         BIT 0x8a
+0000            349   _D01REFSL       BIT 0x8b
+0000            350   _D3SRC0         BIT 0x8c
+0000            351   _D3SRC1         BIT 0x8d
+0000            352   _D3AMEN         BIT 0x8e
+0000            353   _D23REFSL       BIT 0x8f
+0000            354   _D0UDIS         BIT 0x98
+0000            355   _D1UDIS         BIT 0x99
+0000            356   _D2UDIS         BIT 0x9a
+0000            357   _D3UDIS         BIT 0x9b
+0000            358   _EX0            BIT 0xa8
+0000            359   _ET0            BIT 0xa9
+0000            360   _EX1            BIT 0xaa
+0000            361   _ET1            BIT 0xab
+0000            362   _ES0            BIT 0xac
+0000            363   _ET2            BIT 0xad
+0000            364   _ESPI0          BIT 0xae
+0000            365   _EA             BIT 0xaf
+0000            366   _PX0            BIT 0xb8
+0000            367   _PT0            BIT 0xb9
+0000            368   _PX1            BIT 0xba
+0000            369   _PT1            BIT 0xbb
+0000            370   _PS0            BIT 0xbc
+0000            371   _PT2            BIT 0xbd
+0000            372   _PSPI0          BIT 0xbe
+0000            373   _P0_0           BIT 0x80
+0000            374   _P0_1           BIT 0x81
+0000            375   _P0_2           BIT 0x82
+0000            376   _P0_3           BIT 0x83
+0000            377   _P0_4           BIT 0x84
+0000            378   _P0_5           BIT 0x85
+0000            379   _P0_6           BIT 0x86
+0000            380   _P0_7           BIT 0x87
+0000            381   _P1_0           BIT 0x90
+0000            382   _P1_1           BIT 0x91
+0000            383   _P1_2           BIT 0x92
+0000            384   _P1_3           BIT 0x93
+0000            385   _P1_4           BIT 0x94
+0000            386   _P1_5           BIT 0x95
+0000            387   _P1_6           BIT 0x96
+0000            388   _P1_7           BIT 0x97
+0000            389   _P2_0           BIT 0xa0
+0000            390   _P2_1           BIT 0xa1
+0000            391   _P2_2           BIT 0xa2
+0000            392   _P2_3           BIT 0xa3
+0000            393   _P2_4           BIT 0xa4
+0000            394   _P2_5           BIT 0xa5
+0000            395   _P2_6           BIT 0xa6
+0000            396   _P3_0           BIT 0xb0
+0000            397   _P3_1           BIT 0xb1
+0000            398   _P3_2           BIT 0xb2
+0000            399   _P3_3           BIT 0xb3
+0000            400   _P3_4           BIT 0xb4
+0000            401   _P3_7           BIT 0xb7
+0000            402   _CCF0           BIT 0xd8
+0000            403   _CCF1           BIT 0xd9
+0000            404   _CCF2           BIT 0xda
+0000            405   _CCF3           BIT 0xdb
+0000            406   _CCF4           BIT 0xdc
+0000            407   _CCF5           BIT 0xdd
+0000            408   _CR             BIT 0xde
+0000            409   _CF             BIT 0xdf
+0000            410   _PARITY         BIT 0xd0
+0000            411   _F1             BIT 0xd1
+0000            412   _OV             BIT 0xd2
+0000            413   _RS0            BIT 0xd3
+0000            414   _RS1            BIT 0xd4
+0000            415   _F0             BIT 0xd5
+0000            416   _AC             BIT 0xd6
+0000            417   _CY             BIT 0xd7
+0000            418   _RI             BIT 0x98
+0000            419   _TI             BIT 0x99
+0000            420   _RB8            BIT 0x9a
+0000            421   _TB8            BIT 0x9b
+0000            422   _REN            BIT 0x9c
+0000            423   _CE             BIT 0x9d
+0000            424   _SMODE          BIT 0x9e
+0000            425   _RI1            BIT 0xc8
+0000            426   _TI1            BIT 0xc9
+0000            427   _RBX1           BIT 0xca
+0000            428   _TBX1           BIT 0xcb
+0000            429   _REN1           BIT 0xcc
+0000            430   _PERR1          BIT 0xcd
+0000            431   _OVR1           BIT 0xce
+0000            432   _SI             BIT 0xc0
+0000            433   _ACK            BIT 0xc1
+0000            434   _ARBLOST        BIT 0xc2
+0000            435   _ACKRQ          BIT 0xc3
+0000            436   _STO            BIT 0xc4
+0000            437   _STA            BIT 0xc5
+0000            438   _TXMODE         BIT 0xc6
+0000            439   _MASTER         BIT 0xc7
+0000            440   _SPIEN          BIT 0xf8
+0000            441   _TXNF           BIT 0xf9
+0000            442   _NSSMD0         BIT 0xfa
+0000            443   _NSSMD1         BIT 0xfb
+0000            444   _RXOVRN         BIT 0xfc
+0000            445   _MODF           BIT 0xfd
+0000            446   _WCOL           BIT 0xfe
+0000            447   _SPIF           BIT 0xff
+0000            448   _IT0            BIT 0x88
+0000            449   _IE0            BIT 0x89
+0000            450   _IT1            BIT 0x8a
+0000            451   _IE1            BIT 0x8b
+0000            452   _TR0            BIT 0x8c
+0000            453   _TF0            BIT 0x8d
+0000            454   _TR1            BIT 0x8e
+0000            455   _TF1            BIT 0x8f
+0000            456   _T2XCLK0        BIT 0xc8
+0000            457   _T2XCLK1        BIT 0xc9
+0000            458   _TR2            BIT 0xca
+0000            459   _T2SPLIT        BIT 0xcb
+0000            460   _TF2CEN         BIT 0xcc
+0000            461   _TF2LEN         BIT 0xcd
+0000            462   _TF2L           BIT 0xce
+0000            463   _TF2H           BIT 0xcf
+0000            464   _T4XCLK0        BIT 0x98
+0000            465   _T4XCLK1        BIT 0x99
+0000            466   _TR4            BIT 0x9a
+0000            467   _T4SPLIT        BIT 0x9b
+0000            468   _TF4CEN         BIT 0x9c
+0000            469   _TF4LEN         BIT 0x9d
+0000            470   _TF4L           BIT 0x9e
+0000            471   _TF4H           BIT 0x9f
+0000            472   _T5XCLK0        BIT 0xc0
+0000            473   _T5XCLK1        BIT 0xc1
+0000            474   _TR5            BIT 0xc2
+0000            475   _T5SPLIT        BIT 0xc3
+0000            476   _TF5CEN         BIT 0xc4
+0000            477   _TF5LEN         BIT 0xc5
+0000            478   _TF5L           BIT 0xc6
+0000            479   _TF5H           BIT 0xc7
+0000            480   _RIE            BIT 0xd8
+0000            481   _RXTO0          BIT 0xd9
+0000            482   _RXTO1          BIT 0xda
+0000            483   _RFRQ           BIT 0xdb
+0000            484   _TIE            BIT 0xdc
+0000            485   _TXHOLD         BIT 0xdd
+0000            486   _TXNF1          BIT 0xde
+0000            487   _TFRQ           BIT 0xdf
+0000            488   ;--------------------------------------------------------
+0000            489   ; overlayable register banks
+0000            490   ;--------------------------------------------------------
+0000            491            rbank0 segment data overlay
+0000            492   ;--------------------------------------------------------
+0000            493   ; internal ram data
+0000            494   ;--------------------------------------------------------
+0000            495            rseg R_DSEG
+0000            496   _LCDprint_PARM_2:
+0000            497            ds 1
+0001            498   _getsn_PARM_2:
+0001            499            ds 2
+0003            500   _getsn_buff_1_95:
+0003            501            ds 3
+0006            502   _getsn_sloc0_1_0:
+0006            503            ds 2
+0008            504   _main_v_1_103:
+0008            505            ds 8
+0010            506   _main_sign_1_103:
+0010            507            ds 4
+0014            508   _main_half_period_1_103:
+0014            509            ds 4
+0018            510   _main_zero_diff_1_103:
+0018            511            ds 4
+001C            512   _main_delay_1_103:
+001C            513            ds 2
+001E            514   _main_buff_1_103:
+001E            515            ds 3
+0021            516   _main_sloc0_1_0:
+0021            517            ds 4
+0025            518   _main_sloc1_1_0:
+0025            519            ds 4
+0029            520   _main_sloc2_1_0:
+0029            521            ds 4
+002D            522   ;--------------------------------------------------------
+002D            523   ; overlayable items in internal ram 
+002D            524   ;--------------------------------------------------------
+0000            525            rseg    R_OSEG
+0000            526            rseg    R_OSEG
+0000            527   _InitPinADC_PARM_2:
+0000            528            ds 1
+0001            529            rseg    R_OSEG
+0001            530   ;--------------------------------------------------------
+0001            531   ; indirectly addressable internal ram data
+0001            532   ;--------------------------------------------------------
+0000            533            rseg R_ISEG
+0000            534   ;--------------------------------------------------------
+0000            535   ; absolute internal ram data
+0000            536   ;--------------------------------------------------------
+0000            537            DSEG
+0000            538   ;--------------------------------------------------------
+0000            539   ; bit data
+0000            540   ;--------------------------------------------------------
+0000            541            rseg R_BSEG
+0000            542   _LCDprint_PARM_3:
+0000            543            DBIT    1
+0001            544   ;--------------------------------------------------------
+0001            545   ; paged external ram data
+0001            546   ;--------------------------------------------------------
+0000            547            rseg R_PSEG
+0000            548   ;--------------------------------------------------------
+0000            549   ; external ram data
+0000            550   ;--------------------------------------------------------
+0000            551            rseg R_XSEG
+0000            552   _main_String1_1_103:
+0000            553            ds 16
+0010            554   _main_String2_1_103:
+0010            555            ds 16
+0020            556   ;--------------------------------------------------------
+0020            557   ; absolute external ram data
+0020            558   ;--------------------------------------------------------
+0000            559            XSEG
+0000            560   ;--------------------------------------------------------
+0000            561   ; external initialized ram data
+0000            562   ;--------------------------------------------------------
+0000            563            rseg R_IXSEG
+0000            564            rseg R_HOME
+0000            565            rseg R_GSINIT
+0000            566            rseg R_CSEG
+0000            567   ;--------------------------------------------------------
+0000            568   ; Reset entry point and interrupt vectors
+0000            569   ;--------------------------------------------------------
+0000            570            CSEG at 0x0000
+0000 020100     571            ljmp    _crt0
+0003            572   ;--------------------------------------------------------
+0003            573   ; global & static initialisations
+0003            574   ;--------------------------------------------------------
+0000            575            rseg R_HOME
+0000            576            rseg R_GSINIT
+0000            577            rseg R_GSINIT
+0000            578   ;--------------------------------------------------------
+0000            579   ; data variables initialization
+0000            580   ;--------------------------------------------------------
+0000            581            rseg R_DINIT
+0000            582            ; The linker places a 'ret' at the end of segment R_DINIT.
+0000            583   ;--------------------------------------------------------
+0000            584   ; code
+0000            585   ;--------------------------------------------------------
+0000            586            rseg R_CSEG
+0000            587   ;------------------------------------------------------------
+0000            588   ;Allocation info for local variables in function '_c51_external_startup'
+0000            589   ;------------------------------------------------------------
+0000            590   ;------------------------------------------------------------
+0000            591   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:28: char _c51_external_startup (void)
+0000            592   ;        -----------------------------------------
+0000            593   ;         function _c51_external_startup
+0000            594   ;        -----------------------------------------
+0000            595   __c51_external_startup:
+0000            596            using   0
+0000            597   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:31: SFRPAGE = 0x00;
+0000 75A700     598            mov     _SFRPAGE,#0x00
+0003            599   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:32: WDTCN = 0xDE; //First key
+0003 7597DE     600            mov     _WDTCN,#0xDE
+0006            601   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:33: WDTCN = 0xAD; //Second key
+0006 7597AD     602            mov     _WDTCN,#0xAD
+0009            603   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:35: VDM0CN |= 0x80;
+0009 43FF80     604            orl     _VDM0CN,#0x80
+000C            605   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:36: RSTSRC = 0x02;
+000C 75EF02     606            mov     _RSTSRC,#0x02
+000F            607   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:43: SFRPAGE = 0x10;
+000F 75A710     608            mov     _SFRPAGE,#0x10
+0012            609   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:44: PFE0CN  = 0x20; // SYSCLK < 75 MHz.
+0012 75C120     610            mov     _PFE0CN,#0x20
+0015            611   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:45: SFRPAGE = 0x00;
+0015 75A700     612            mov     _SFRPAGE,#0x00
+0018            613   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:66: CLKSEL = 0x00;
+0018 75A900     614            mov     _CLKSEL,#0x00
+001B            615   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:67: CLKSEL = 0x00;
+001B 75A900     616            mov     _CLKSEL,#0x00
+001E            617   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:68: while ((CLKSEL & 0x80) == 0);
+001E            618   L002001?:
+001E E5A9       619            mov     a,_CLKSEL
+0020 30E710     620            jnb     acc.7,L002001?
+0023            621   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:69: CLKSEL = 0x03;
+0023 75A903     622            mov     _CLKSEL,#0x03
+0026            623   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:70: CLKSEL = 0x03;
+0026 75A903     624            mov     _CLKSEL,#0x03
+0029            625   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:71: while ((CLKSEL & 0x80) == 0);
+0029            626   L002004?:
+0029 E5A9       627            mov     a,_CLKSEL
+002B 30E790     628            jnb     acc.7,L002004?
+002E            629   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:76: P0MDOUT |= 0x10; // Enable UART0 TX as push-pull output
+002E 43A410     630            orl     _P0MDOUT,#0x10
+0031            631   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:78: XBR0     = 0x01; // Enable UART0 on P0.4(TX) and P0.5(RX)                     
+0031 75E101     632            mov     _XBR0,#0x01
+0034            633   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:79: XBR1     = 0X00;
+0034 75E200     634            mov     _XBR1,#0x00
+0037            635   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:80: XBR2     = 0x40; // Enable crossbar and weak pull-ups
+0037 75E340     636            mov     _XBR2,#0x40
+003A            637   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:86: SCON0 = 0x10;
+003A 759810     638            mov     _SCON0,#0x10
+003D            639   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:87: CKCON0 |= 0b_0000_0000 ; // Timer 1 uses the system clock divided by 12.
+003D 858E8E     640            mov     _CKCON0,_CKCON0
+0040            641   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:88: TH1 = 0x100-((SYSCLK/BAUDRATE)/(2L*12L));
+0040 758DE6     642            mov     _TH1,#0xE6
+0043            643   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:89: TL1 = TH1;      // Init Timer1
+0043 858D8B     644            mov     _TL1,_TH1
+0046            645   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:90: TMOD &= ~0xf0;  // TMOD: timer 1 in 8-bit auto-reload
+0046 53890F     646            anl     _TMOD,#0x0F
+0049            647   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:91: TMOD |=  0x20;                       
+0049 438920     648            orl     _TMOD,#0x20
+004C            649   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:92: TR1 = 1; // START Timer1
+004C D28E       650            setb    _TR1
+004E            651   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:93: TI = 1;  // Indicate TX0 ready
+004E D299       652            setb    _TI
+0050            653   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:95: return 0;
+0050 758200     654            mov     dpl,#0x00
+0053 22         655            ret
+0054            656   ;------------------------------------------------------------
+0054            657   ;Allocation info for local variables in function 'InitADC'
+0054            658   ;------------------------------------------------------------
+0054            659   ;------------------------------------------------------------
+0054            660   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:98: void InitADC (void)
+0054            661   ;        -----------------------------------------
+0054            662   ;         function InitADC
+0054            663   ;        -----------------------------------------
+0054            664   _InitADC:
+0054            665   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:100: SFRPAGE = 0x00;
+0054 75A700     666            mov     _SFRPAGE,#0x00
+0057            667   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:101: ADC0CN1 = 0b_10_000_000; //14-bit,  Right justified no shifting applied, perform and Accumulate 1 conversion.
+0057 75B280     668            mov     _ADC0CN1,#0x80
+005A            669   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:102: ADC0CF0 = 0b_11111_0_00; // SYSCLK/32
+005A 75BCF8     670            mov     _ADC0CF0,#0xF8
+005D            671   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:103: ADC0CF1 = 0b_0_0_011110; // Same as default for now
+005D 75B91E     672            mov     _ADC0CF1,#0x1E
+0060            673   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:104: ADC0CN0 = 0b_0_0_0_0_0_00_0; // Same as default for now
+0060 75E800     674            mov     _ADC0CN0,#0x00
+0063            675   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:105: ADC0CF2 = 0b_0_01_11111 ; // GND pin, Vref=VDD
+0063 75DF3F     676            mov     _ADC0CF2,#0x3F
+0066            677   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:106: ADC0CN2 = 0b_0_000_0000;  // Same as default for now. ADC0 conversion initiated on write of 1 to ADBUSY.
+0066 75B300     678            mov     _ADC0CN2,#0x00
+0069            679   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:107: ADEN=1; // Enable ADC
+0069 D2EF       680            setb    _ADEN
+006B 22         681            ret
+006C            682   ;------------------------------------------------------------
+006C            683   ;Allocation info for local variables in function 'Timer3us'
+006C            684   ;------------------------------------------------------------
+006C            685   ;us                        Allocated to registers r2 
+006C            686   ;i                         Allocated to registers r3 
+006C            687   ;------------------------------------------------------------
+006C            688   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:111: void Timer3us(unsigned char us)
+006C            689   ;        -----------------------------------------
+006C            690   ;         function Timer3us
+006C            691   ;        -----------------------------------------
+006C            692   _Timer3us:
+006C AA82       693            mov     r2,dpl
+006E            694   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:116: CKCON0|=0b_0100_0000;
+006E 438E40     695            orl     _CKCON0,#0x40
+0071            696   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:118: TMR3RL = (-(SYSCLK)/1000000L); // Set Timer3 to overflow in 1us.
+0071 7592B8     697            mov     _TMR3RL,#0xB8
+0074 7593FF     698            mov     (_TMR3RL >> 8),#0xFF
+0077            699   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:119: TMR3 = TMR3RL;                 // Initialize Timer3 for first overflow
+0077 859294     700            mov     _TMR3,_TMR3RL
+007A 859395     701            mov     (_TMR3 >> 8),(_TMR3RL >> 8)
+007D            702   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:121: TMR3CN0 = 0x04;                 // Sart Timer3 and clear overflow flag
+007D 759104     703            mov     _TMR3CN0,#0x04
+0080            704   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:122: for (i = 0; i < us; i++)       // Count <us> overflows
+0080 7B00       705            mov     r3,#0x00
+0082            706   L004004?:
+0082 C3         707            clr     c
+0083 EB         708            mov     a,r3
+0084 9A         709            subb    a,r2
+0085 5001       710            jnc     L004007?
+0087            711   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:124: while (!(TMR3CN0 & 0x80));  // Wait for overflow
+0087            712   L004001?:
+0087 E591       713            mov     a,_TMR3CN0
+0089 30E790     714            jnb     acc.7,L004001?
+008C            715   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:125: TMR3CN0 &= ~(0x80);         // Clear overflow indicator
+008C 53917F     716            anl     _TMR3CN0,#0x7F
+008F            717   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:122: for (i = 0; i < us; i++)       // Count <us> overflows
+008F 0B         718            inc     r3
+0090 8001       719            sjmp    L004004?
+0092            720   L004007?:
+0092            721   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:127: TMR3CN0 = 0 ;                   // Stop Timer3 and clear overflow flag
+0092 759100     722            mov     _TMR3CN0,#0x00
+0095 22         723            ret
+0096            724   ;------------------------------------------------------------
+0096            725   ;Allocation info for local variables in function 'waitms'
+0096            726   ;------------------------------------------------------------
+0096            727   ;ms                        Allocated to registers r2 r3 
+0096            728   ;j                         Allocated to registers r2 r3 
+0096            729   ;------------------------------------------------------------
+0096            730   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:130: void waitms (unsigned int ms)
+0096            731   ;        -----------------------------------------
+0096            732   ;         function waitms
+0096            733   ;        -----------------------------------------
+0096            734   _waitms:
+0096 AA82       735            mov     r2,dpl
+0098 AB83       736            mov     r3,dph
+009A            737   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:133: for(j=ms; j!=0; j--)
+009A            738   L005001?:
+009A BA0050     739            cjne    r2,#0x00,L005010?
+009D BB0050     740            cjne    r3,#0x00,L005010?
+00A0 22         741            ret
+00A1            742   L005010?:
+00A1            743   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:135: Timer3us(249);
+00A1 7582F9     744            mov     dpl,#0xF9
+00A4 C002       745            push    ar2
+00A6 C003       746            push    ar3
+00A8 120100     747            lcall   _Timer3us
+00AB            748   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:136: Timer3us(249);
+00AB 7582F9     749            mov     dpl,#0xF9
+00AE 120100     750            lcall   _Timer3us
+00B1            751   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:137: Timer3us(249);
+00B1 7582F9     752            mov     dpl,#0xF9
+00B4 120100     753            lcall   _Timer3us
+00B7            754   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:138: Timer3us(250);
+00B7 7582FA     755            mov     dpl,#0xFA
+00BA 120100     756            lcall   _Timer3us
+00BD D003       757            pop     ar3
+00BF D002       758            pop     ar2
+00C1            759   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:133: for(j=ms; j!=0; j--)
+00C1 1A         760            dec     r2
+00C2 BAFF90     761            cjne    r2,#0xff,L005011?
+00C5 1B         762            dec     r3
+00C6            763   L005011?:
+00C6 8001       764            sjmp    L005001?
+00C8            765   ;------------------------------------------------------------
+00C8            766   ;Allocation info for local variables in function 'InitPinADC'
+00C8            767   ;------------------------------------------------------------
+00C8            768   ;pinno                     Allocated with name '_InitPinADC_PARM_2'
+00C8            769   ;portno                    Allocated to registers r2 
+00C8            770   ;mask                      Allocated to registers r3 
+00C8            771   ;------------------------------------------------------------
+00C8            772   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:144: void InitPinADC (unsigned char portno, unsigned char pinno)
+00C8            773   ;        -----------------------------------------
+00C8            774   ;         function InitPinADC
+00C8            775   ;        -----------------------------------------
+00C8            776   _InitPinADC:
+00C8 AA82       777            mov     r2,dpl
+00CA            778   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:147: mask=1<<pinno;
+00CA 85C8F0     779            mov     b,_InitPinADC_PARM_2
+00CD 05F0       780            inc     b
+00CF 7401       781            mov     a,#0x01
+00D1 8001       782            sjmp    L006013?
+00D3            783   L006011?:
+00D3 25E0       784            add     a,acc
+00D5            785   L006013?:
+00D5 D5F050     786            djnz    b,L006011?
+00D8 FB         787            mov     r3,a
+00D9            788   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:148: SFRPAGE = 0x20;
+00D9 75A720     789            mov     _SFRPAGE,#0x20
+00DC            790   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:149: switch (portno)
+00DC BA0090     791            cjne    r2,#0x00,L006014?
+00DF 8001       792            sjmp    L006001?
+00E1            793   L006014?:
+00E1 BA0110     794            cjne    r2,#0x01,L006015?
+00E4 8001       795            sjmp    L006002?
+00E6            796   L006015?:
+00E6            797   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:150: {case 0: // P0.0 and P0.3 can not be used for analog input
+00E6 BA0290     798            cjne    r2,#0x02,L006005?
+00E9 8001       799            sjmp    L006003?
+00EB            800   L006001?:
+00EB            801   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:151: P0MDIN &= (~mask); // Set pin as analog input
+00EB EB         802            mov     a,r3
+00EC F4         803            cpl     a
+00ED FA         804            mov     r2,a
+00EE 52F1       805            anl     _P0MDIN,a
+00F0            806   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:152: P0|=mask; // Set the bit associated with the pin in the Pn register to 1
+00F0 EB         807            mov     a,r3
+00F1 4280       808            orl     _P0,a
+00F3            809   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:153: P0SKIP |= mask; // Skip Crossbar decoding for this pin
+00F3 EB         810            mov     a,r3
+00F4 42D4       811            orl     _P0SKIP,a
+00F6            812   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:154: break;
+00F6            813   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:155: case 1:
+00F6 8001       814            sjmp    L006005?
+00F8            815   L006002?:
+00F8            816   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:156: P1MDIN &= (~mask); // Set pin as analog input
+00F8 EB         817            mov     a,r3
+00F9 F4         818            cpl     a
+00FA FA         819            mov     r2,a
+00FB 52F2       820            anl     _P1MDIN,a
+00FD            821   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:157: P1|=mask; // Set the bit associated with the pin in the Pn register to 1
+00FD EB         822            mov     a,r3
+00FE 4290       823            orl     _P1,a
+0100            824   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:158: P1SKIP |= mask; // Skip Crossbar decoding for this pin
+0100 EB         825            mov     a,r3
+0101 42D5       826            orl     _P1SKIP,a
+0103            827   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:159: break;
+0103            828   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:160: case 2: // P2.0 and P2.7 can not be used for analog input
+0103 8001       829            sjmp    L006005?
+0105            830   L006003?:
+0105            831   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:161: P2MDIN &= (~mask); // Set pin as analog input
+0105 EB         832            mov     a,r3
+0106 F4         833            cpl     a
+0107 FA         834            mov     r2,a
+0108 52F3       835            anl     _P2MDIN,a
+010A            836   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:162: P2|=mask; // Set the bit associated with the pin in the Pn register to 1
+010A EB         837            mov     a,r3
+010B 42A0       838            orl     _P2,a
+010D            839   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:163: P2SKIP |= mask; // Skip Crossbar decoding for this pin
+010D EB         840            mov     a,r3
+010E 42CC       841            orl     _P2SKIP,a
+0110            842   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:167: }
+0110            843   L006005?:
+0110            844   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:168: SFRPAGE = 0x00;
+0110 75A700     845            mov     _SFRPAGE,#0x00
+0113 22         846            ret
+0114            847   ;------------------------------------------------------------
+0114            848   ;Allocation info for local variables in function 'ADC_at_Pin'
+0114            849   ;------------------------------------------------------------
+0114            850   ;pin                       Allocated to registers 
+0114            851   ;------------------------------------------------------------
+0114            852   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:171: unsigned int ADC_at_Pin(unsigned char pin)
+0114            853   ;        -----------------------------------------
+0114            854   ;         function ADC_at_Pin
+0114            855   ;        -----------------------------------------
+0114            856   _ADC_at_Pin:
+0114 8582BB     857            mov     _ADC0MX,dpl
+0117            858   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:174: ADBUSY=1;       // Dummy conversion first to select new pin
+0117 D2EC       859            setb    _ADBUSY
+0119            860   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:175: while (ADBUSY); // Wait for dummy conversion to finish
+0119            861   L007001?:
+0119 20EC10     862            jb      _ADBUSY,L007001?
+011C            863   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:176: ADBUSY = 1;     // Convert voltage at the pin
+011C D2EC       864            setb    _ADBUSY
+011E            865   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:177: while (ADBUSY); // Wait for conversion to complete
+011E            866   L007004?:
+011E 20EC50     867            jb      _ADBUSY,L007004?
+0121            868   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:178: return (ADC0);
+0121 85BD82     869            mov     dpl,_ADC0
+0124 85BE83     870            mov     dph,(_ADC0 >> 8)
+0127 22         871            ret
+0128            872   ;------------------------------------------------------------
+0128            873   ;Allocation info for local variables in function 'Volts_at_Pin'
+0128            874   ;------------------------------------------------------------
+0128            875   ;pin                       Allocated to registers r2 
+0128            876   ;------------------------------------------------------------
+0128            877   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:181: float Volts_at_Pin( unsigned char pin)
+0128            878   ;        -----------------------------------------
+0128            879   ;         function Volts_at_Pin
+0128            880   ;        -----------------------------------------
+0128            881   _Volts_at_Pin:
+0128            882   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:183: return ((ADC_at_Pin(pin)*VDD)/16383.0);
+0128 120100     883            lcall   _ADC_at_Pin
+012B 120100     884            lcall   ___uint2fs
+012E AA82       885            mov     r2,dpl
+0130 AB83       886            mov     r3,dph
+0132 ACF0       887            mov     r4,b
+0134 FD         888            mov     r5,a
+0135 C002       889            push    ar2
+0137 C003       890            push    ar3
+0139 C004       891            push    ar4
+013B C005       892            push    ar5
+013D 90C6A8     893            mov     dptr,#0xC6A8
+0140 75F053     894            mov     b,#0x53
+0143 7440       895            mov     a,#0x40
+0145 120100     896            lcall   ___fsmul
+0148 AA82       897            mov     r2,dpl
+014A AB83       898            mov     r3,dph
+014C ACF0       899            mov     r4,b
+014E FD         900            mov     r5,a
+014F E581       901            mov     a,sp
+0151 24FC       902            add     a,#0xfc
+0153 F581       903            mov     sp,a
+0155 E4         904            clr     a
+0156 C0E0       905            push    acc
+0158 74FC       906            mov     a,#0xFC
+015A C0E0       907            push    acc
+015C 747F       908            mov     a,#0x7F
+015E C0E0       909            push    acc
+0160 7446       910            mov     a,#0x46
+0162 C0E0       911            push    acc
+0164 8A82       912            mov     dpl,r2
+0166 8B83       913            mov     dph,r3
+0168 8CF0       914            mov     b,r4
+016A ED         915            mov     a,r5
+016B 120100     916            lcall   ___fsdiv
+016E AA82       917            mov     r2,dpl
+0170 AB83       918            mov     r3,dph
+0172 ACF0       919            mov     r4,b
+0174 FD         920            mov     r5,a
+0175 E581       921            mov     a,sp
+0177 24FC       922            add     a,#0xfc
+0179 F581       923            mov     sp,a
+017B 8A82       924            mov     dpl,r2
+017D 8B83       925            mov     dph,r3
+017F 8CF0       926            mov     b,r4
+0181 ED         927            mov     a,r5
+0182 22         928            ret
+0183            929   ;------------------------------------------------------------
+0183            930   ;Allocation info for local variables in function 'TIMER0_Init'
+0183            931   ;------------------------------------------------------------
+0183            932   ;------------------------------------------------------------
+0183            933   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:186: void TIMER0_Init(void)
+0183            934   ;        -----------------------------------------
+0183            935   ;         function TIMER0_Init
+0183            936   ;        -----------------------------------------
+0183            937   _TIMER0_Init:
+0183            938   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:188: TMOD&=0b_1111_0000; // Set the bits of Timer/Counter 0 to zero
+0183 5389F0     939            anl     _TMOD,#0xF0
+0186            940   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:189: TMOD|=0b_0000_0001; // Timer/Counter 0 used as a 16-bit timer
+0186 438901     941            orl     _TMOD,#0x01
+0189            942   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:190: TR0=0; // Stop Timer/Counter 0
+0189 C28C       943            clr     _TR0
+018B 22         944            ret
+018C            945   ;------------------------------------------------------------
+018C            946   ;Allocation info for local variables in function 'LCD_pulse'
+018C            947   ;------------------------------------------------------------
+018C            948   ;------------------------------------------------------------
+018C            949   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:193: void LCD_pulse (void)
+018C            950   ;        -----------------------------------------
+018C            951   ;         function LCD_pulse
+018C            952   ;        -----------------------------------------
+018C            953   _LCD_pulse:
+018C            954   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:195: LCD_E=1;
+018C D2A5       955            setb    _P2_5
+018E            956   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:196: Timer3us(40);
+018E 758228     957            mov     dpl,#0x28
+0191 120100     958            lcall   _Timer3us
+0194            959   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:197: LCD_E=0;
+0194 C2A5       960            clr     _P2_5
+0196 22         961            ret
+0197            962   ;------------------------------------------------------------
+0197            963   ;Allocation info for local variables in function 'LCD_byte'
+0197            964   ;------------------------------------------------------------
+0197            965   ;x                         Allocated to registers r2 
+0197            966   ;------------------------------------------------------------
+0197            967   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:200: void LCD_byte (unsigned char x)
+0197            968   ;        -----------------------------------------
+0197            969   ;         function LCD_byte
+0197            970   ;        -----------------------------------------
+0197            971   _LCD_byte:
+0197 AA82       972            mov     r2,dpl
+0199            973   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:203: ACC=x; //Send high nible
+0199 8AE0       974            mov     _ACC,r2
+019B            975   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:204: LCD_D7=ACC_7;
+019B A2E7       976            mov     c,_ACC_7
+019D 92A1       977            mov     _P2_1,c
+019F            978   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:205: LCD_D6=ACC_6;
+019F A2E6       979            mov     c,_ACC_6
+01A1 92A2       980            mov     _P2_2,c
+01A3            981   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:206: LCD_D5=ACC_5;
+01A3 A2E5       982            mov     c,_ACC_5
+01A5 92A3       983            mov     _P2_3,c
+01A7            984   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:207: LCD_D4=ACC_4;
+01A7 A2E4       985            mov     c,_ACC_4
+01A9 92A4       986            mov     _P2_4,c
+01AB            987   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:208: LCD_pulse();
+01AB C002       988            push    ar2
+01AD 120100     989            lcall   _LCD_pulse
+01B0            990   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:209: Timer3us(40);
+01B0 758228     991            mov     dpl,#0x28
+01B3 120100     992            lcall   _Timer3us
+01B6 D002       993            pop     ar2
+01B8            994   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:210: ACC=x; //Send low nible
+01B8 8AE0       995            mov     _ACC,r2
+01BA            996   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:211: LCD_D7=ACC_3;
+01BA A2E3       997            mov     c,_ACC_3
+01BC 92A1       998            mov     _P2_1,c
+01BE            999   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:212: LCD_D6=ACC_2;
+01BE A2E2      1000            mov     c,_ACC_2
+01C0 92A2      1001            mov     _P2_2,c
+01C2           1002   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:213: LCD_D5=ACC_1;
+01C2 A2E1      1003            mov     c,_ACC_1
+01C4 92A3      1004            mov     _P2_3,c
+01C6           1005   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:214: LCD_D4=ACC_0;
+01C6 A2E0      1006            mov     c,_ACC_0
+01C8 92A4      1007            mov     _P2_4,c
+01CA           1008   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:215: LCD_pulse();
+01CA 020100    1009            ljmp    _LCD_pulse
+01CD           1010   ;------------------------------------------------------------
+01CD           1011   ;Allocation info for local variables in function 'WriteData'
+01CD           1012   ;------------------------------------------------------------
+01CD           1013   ;x                         Allocated to registers r2 
+01CD           1014   ;------------------------------------------------------------
+01CD           1015   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:218: void WriteData (unsigned char x)
+01CD           1016   ;        -----------------------------------------
+01CD           1017   ;         function WriteData
+01CD           1018   ;        -----------------------------------------
+01CD           1019   _WriteData:
+01CD AA82      1020            mov     r2,dpl
+01CF           1021   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:220: LCD_RS=1;
+01CF D2A6      1022            setb    _P2_6
+01D1           1023   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:221: LCD_byte(x);
+01D1 8A82      1024            mov     dpl,r2
+01D3 120100    1025            lcall   _LCD_byte
+01D6           1026   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:222: waitms(2);
+01D6 900002    1027            mov     dptr,#0x0002
+01D9 020100    1028            ljmp    _waitms
+01DC           1029   ;------------------------------------------------------------
+01DC           1030   ;Allocation info for local variables in function 'WriteCommand'
+01DC           1031   ;------------------------------------------------------------
+01DC           1032   ;x                         Allocated to registers r2 
+01DC           1033   ;------------------------------------------------------------
+01DC           1034   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:225: void WriteCommand (unsigned char x)
+01DC           1035   ;        -----------------------------------------
+01DC           1036   ;         function WriteCommand
+01DC           1037   ;        -----------------------------------------
+01DC           1038   _WriteCommand:
+01DC AA82      1039            mov     r2,dpl
+01DE           1040   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:227: LCD_RS=0;
+01DE C2A6      1041            clr     _P2_6
+01E0           1042   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:228: LCD_byte(x);
+01E0 8A82      1043            mov     dpl,r2
+01E2 120100    1044            lcall   _LCD_byte
+01E5           1045   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:229: waitms(5);
+01E5 900005    1046            mov     dptr,#0x0005
+01E8 020100    1047            ljmp    _waitms
+01EB           1048   ;------------------------------------------------------------
+01EB           1049   ;Allocation info for local variables in function 'LCD_4BIT'
+01EB           1050   ;------------------------------------------------------------
+01EB           1051   ;------------------------------------------------------------
+01EB           1052   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:232: void LCD_4BIT (void)
+01EB           1053   ;        -----------------------------------------
+01EB           1054   ;         function LCD_4BIT
+01EB           1055   ;        -----------------------------------------
+01EB           1056   _LCD_4BIT:
+01EB           1057   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:234: LCD_E=0; // Resting state of LCD's enable is zero
+01EB C2A5      1058            clr     _P2_5
+01ED           1059   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:236: waitms(20);
+01ED 900014    1060            mov     dptr,#0x0014
+01F0 120100    1061            lcall   _waitms
+01F3           1062   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:238: WriteCommand(0x33);
+01F3 758233    1063            mov     dpl,#0x33
+01F6 120100    1064            lcall   _WriteCommand
+01F9           1065   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:239: WriteCommand(0x33);
+01F9 758233    1066            mov     dpl,#0x33
+01FC 120100    1067            lcall   _WriteCommand
+01FF           1068   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:240: WriteCommand(0x32); // Change to 4-bit mode
+01FF 758232    1069            mov     dpl,#0x32
+0202 120100    1070            lcall   _WriteCommand
+0205           1071   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:243: WriteCommand(0x28);
+0205 758228    1072            mov     dpl,#0x28
+0208 120100    1073            lcall   _WriteCommand
+020B           1074   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:244: WriteCommand(0x0c);
+020B 75820C    1075            mov     dpl,#0x0C
+020E 120100    1076            lcall   _WriteCommand
+0211           1077   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:245: WriteCommand(0x01); // Clear screen command (takes some time)
+0211 758201    1078            mov     dpl,#0x01
+0214 120100    1079            lcall   _WriteCommand
+0217           1080   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:246: waitms(20); // Wait for clear screen command to finsih.
+0217 900014    1081            mov     dptr,#0x0014
+021A 020100    1082            ljmp    _waitms
+021D           1083   ;------------------------------------------------------------
+021D           1084   ;Allocation info for local variables in function 'LCDprint'
+021D           1085   ;------------------------------------------------------------
+021D           1086   ;line                      Allocated with name '_LCDprint_PARM_2'
+021D           1087   ;string                    Allocated to registers r2 r3 r4 
+021D           1088   ;j                         Allocated to registers r5 r6 
+021D           1089   ;------------------------------------------------------------
+021D           1090   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:249: void LCDprint(char * string, unsigned char line, bit clear)
+021D           1091   ;        -----------------------------------------
+021D           1092   ;         function LCDprint
+021D           1093   ;        -----------------------------------------
+021D           1094   _LCDprint:
+021D AA82      1095            mov     r2,dpl
+021F AB83      1096            mov     r3,dph
+0221 ACF0      1097            mov     r4,b
+0223           1098   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:253: WriteCommand(line==2?0xc0:0x80);
+0223 7402      1099            mov     a,#0x02
+0225 B5F890    1100            cjne    a,_LCDprint_PARM_2,L015013?
+0228 7DC0      1101            mov     r5,#0xC0
+022A 8001      1102            sjmp    L015014?
+022C           1103   L015013?:
+022C 7D80      1104            mov     r5,#0x80
+022E           1105   L015014?:
+022E 8D82      1106            mov     dpl,r5
+0230 C002      1107            push    ar2
+0232 C003      1108            push    ar3
+0234 C004      1109            push    ar4
+0236 120100    1110            lcall   _WriteCommand
+0239           1111   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:254: waitms(5);
+0239 900005    1112            mov     dptr,#0x0005
+023C 120100    1113            lcall   _waitms
+023F D004      1114            pop     ar4
+0241 D003      1115            pop     ar3
+0243 D002      1116            pop     ar2
+0245           1117   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:255: for(j=0; string[j]!=0; j++)  WriteData(string[j]);// Write the message
+0245 7D00      1118            mov     r5,#0x00
+0247 7E00      1119            mov     r6,#0x00
+0249           1120   L015003?:
+0249 ED        1121            mov     a,r5
+024A 2A        1122            add     a,r2
+024B FF        1123            mov     r7,a
+024C EE        1124            mov     a,r6
+024D 3B        1125            addc    a,r3
+024E F8        1126            mov     r0,a
+024F 8C01      1127            mov     ar1,r4
+0251 8F82      1128            mov     dpl,r7
+0253 8883      1129            mov     dph,r0
+0255 89F0      1130            mov     b,r1
+0257 120100    1131            lcall   __gptrget
+025A FF        1132            mov     r7,a
+025B 6001      1133            jz      L015006?
+025D 8F82      1134            mov     dpl,r7
+025F C002      1135            push    ar2
+0261 C003      1136            push    ar3
+0263 C004      1137            push    ar4
+0265 C005      1138            push    ar5
+0267 C006      1139            push    ar6
+0269 120100    1140            lcall   _WriteData
+026C D006      1141            pop     ar6
+026E D005      1142            pop     ar5
+0270 D004      1143            pop     ar4
+0272 D003      1144            pop     ar3
+0274 D002      1145            pop     ar2
+0276 0D        1146            inc     r5
+0277 BD0010    1147            cjne    r5,#0x00,L015003?
+027A 0E        1148            inc     r6
+027B 8001      1149            sjmp    L015003?
+027D           1150   L015006?:
+027D           1151   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:256: if(clear) for(; j<16; j++) WriteData(' '); // Clear the rest of the line
+027D 3068D0    1152            jnb     _LCDprint_PARM_3,L015011?
+0280 8D02      1153            mov     ar2,r5
+0282 8E03      1154            mov     ar3,r6
+0284           1155   L015007?:
+0284 C3        1156            clr     c
+0285 EA        1157            mov     a,r2
+0286 9410      1158            subb    a,#0x10
+0288 EB        1159            mov     a,r3
+0289 6480      1160            xrl     a,#0x80
+028B 9480      1161            subb    a,#0x80
+028D 5001      1162            jnc     L015011?
+028F 758220    1163            mov     dpl,#0x20
+0292 C002      1164            push    ar2
+0294 C003      1165            push    ar3
+0296 120100    1166            lcall   _WriteData
+0299 D003      1167            pop     ar3
+029B D002      1168            pop     ar2
+029D 0A        1169            inc     r2
+029E BA0010    1170            cjne    r2,#0x00,L015007?
+02A1 0B        1171            inc     r3
+02A2 8001      1172            sjmp    L015007?
+02A4           1173   L015011?:
+02A4 22        1174            ret
+02A5           1175   ;------------------------------------------------------------
+02A5           1176   ;Allocation info for local variables in function 'getsn'
+02A5           1177   ;------------------------------------------------------------
+02A5           1178   ;len                       Allocated with name '_getsn_PARM_2'
+02A5           1179   ;buff                      Allocated with name '_getsn_buff_1_95'
+02A5           1180   ;j                         Allocated with name '_getsn_sloc0_1_0'
+02A5           1181   ;c                         Allocated to registers r3 
+02A5           1182   ;sloc0                     Allocated with name '_getsn_sloc0_1_0'
+02A5           1183   ;------------------------------------------------------------
+02A5           1184   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:259: int getsn (char * buff, int len)
+02A5           1185   ;        -----------------------------------------
+02A5           1186   ;         function getsn
+02A5           1187   ;        -----------------------------------------
+02A5           1188   _getsn:
+02A5 858210    1189            mov     _getsn_buff_1_95,dpl
+02A8 858311    1190            mov     (_getsn_buff_1_95 + 1),dph
+02AB 85F012    1191            mov     (_getsn_buff_1_95 + 2),b
+02AE           1192   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:264: for(j=0; j<(len-1); j++)
+02AE E4        1193            clr     a
+02AF F560      1194            mov     _getsn_sloc0_1_0,a
+02B1 F561      1195            mov     (_getsn_sloc0_1_0 + 1),a
+02B3 E5A8      1196            mov     a,_getsn_PARM_2
+02B5 24FF      1197            add     a,#0xff
+02B7 FF        1198            mov     r7,a
+02B8 E5A9      1199            mov     a,(_getsn_PARM_2 + 1)
+02BA 34FF      1200            addc    a,#0xff
+02BC F8        1201            mov     r0,a
+02BD 7900      1202            mov     r1,#0x00
+02BF 7A00      1203            mov     r2,#0x00
+02C1           1204   L016005?:
+02C1 C3        1205            clr     c
+02C2 E9        1206            mov     a,r1
+02C3 9F        1207            subb    a,r7
+02C4 EA        1208            mov     a,r2
+02C5 6480      1209            xrl     a,#0x80
+02C7 88F0      1210            mov     b,r0
+02C9 63F080    1211            xrl     b,#0x80
+02CC 95F0      1212            subb    a,b
+02CE 5001      1213            jnc     L016008?
+02D0           1214   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:266: c=getchar();
+02D0 C002      1215            push    ar2
+02D2 C007      1216            push    ar7
+02D4 C000      1217            push    ar0
+02D6 C001      1218            push    ar1
+02D8 120100    1219            lcall   _getchar
+02DB AB82      1220            mov     r3,dpl
+02DD D001      1221            pop     ar1
+02DF D000      1222            pop     ar0
+02E1 D007      1223            pop     ar7
+02E3 D002      1224            pop     ar2
+02E5           1225   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:267: if ( (c=='\n') || (c=='\r') )
+02E5 BB0A10    1226            cjne    r3,#0x0A,L016015?
+02E8 8001      1227            sjmp    L016001?
+02EA           1228   L016015?:
+02EA BB0D90    1229            cjne    r3,#0x0D,L016002?
+02ED           1230   L016001?:
+02ED           1231   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:269: buff[j]=0;
+02ED E560      1232            mov     a,_getsn_sloc0_1_0
+02EF 2510      1233            add     a,_getsn_buff_1_95
+02F1 FC        1234            mov     r4,a
+02F2 E561      1235            mov     a,(_getsn_sloc0_1_0 + 1)
+02F4 3511      1236            addc    a,(_getsn_buff_1_95 + 1)
+02F6 FD        1237            mov     r5,a
+02F7 AE12      1238            mov     r6,(_getsn_buff_1_95 + 2)
+02F9 8C82      1239            mov     dpl,r4
+02FB 8D83      1240            mov     dph,r5
+02FD 8EF0      1241            mov     b,r6
+02FF E4        1242            clr     a
+0300 120100    1243            lcall   __gptrput
+0303           1244   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:270: return j;
+0303 856082    1245            mov     dpl,_getsn_sloc0_1_0
+0306 856183    1246            mov     dph,(_getsn_sloc0_1_0 + 1)
+0309 22        1247            ret
+030A           1248   L016002?:
+030A           1249   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:274: buff[j]=c;
+030A E9        1250            mov     a,r1
+030B 2510      1251            add     a,_getsn_buff_1_95
+030D FC        1252            mov     r4,a
+030E EA        1253            mov     a,r2
+030F 3511      1254            addc    a,(_getsn_buff_1_95 + 1)
+0311 FD        1255            mov     r5,a
+0312 AE12      1256            mov     r6,(_getsn_buff_1_95 + 2)
+0314 8C82      1257            mov     dpl,r4
+0316 8D83      1258            mov     dph,r5
+0318 8EF0      1259            mov     b,r6
+031A EB        1260            mov     a,r3
+031B 120100    1261            lcall   __gptrput
+031E           1262   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:264: for(j=0; j<(len-1); j++)
+031E 09        1263            inc     r1
+031F B90010    1264            cjne    r1,#0x00,L016018?
+0322 0A        1265            inc     r2
+0323           1266   L016018?:
+0323 8960      1267            mov     _getsn_sloc0_1_0,r1
+0325 8A61      1268            mov     (_getsn_sloc0_1_0 + 1),r2
+0327 8001      1269            sjmp    L016005?
+0329           1270   L016008?:
+0329           1271   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:277: buff[j]=0;
+0329 E560      1272            mov     a,_getsn_sloc0_1_0
+032B 2510      1273            add     a,_getsn_buff_1_95
+032D FA        1274            mov     r2,a
+032E E561      1275            mov     a,(_getsn_sloc0_1_0 + 1)
+0330 3511      1276            addc    a,(_getsn_buff_1_95 + 1)
+0332 FB        1277            mov     r3,a
+0333 AC12      1278            mov     r4,(_getsn_buff_1_95 + 2)
+0335 8A82      1279            mov     dpl,r2
+0337 8B83      1280            mov     dph,r3
+0339 8CF0      1281            mov     b,r4
+033B E4        1282            clr     a
+033C 120100    1283            lcall   __gptrput
+033F           1284   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:278: return len;
+033F 85A882    1285            mov     dpl,_getsn_PARM_2
+0342 85A983    1286            mov     dph,(_getsn_PARM_2 + 1)
+0345 22        1287            ret
+0346           1288   ;------------------------------------------------------------
+0346           1289   ;Allocation info for local variables in function 'Get_ADC'
+0346           1290   ;------------------------------------------------------------
+0346           1291   ;------------------------------------------------------------
+0346           1292   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:281: unsigned int Get_ADC (void)
+0346           1293   ;        -----------------------------------------
+0346           1294   ;         function Get_ADC
+0346           1295   ;        -----------------------------------------
+0346           1296   _Get_ADC:
+0346           1297   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:283: ADBUSY = 1;
+0346 D2EC      1298            setb    _ADBUSY
+0348           1299   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:284: while (ADBUSY); // Wait for conversion to complete
+0348           1300   L017001?:
+0348 20EC50    1301            jb      _ADBUSY,L017001?
+034B           1302   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:285: return (ADC0);
+034B 85BD82    1303            mov     dpl,_ADC0
+034E 85BE83    1304            mov     dph,(_ADC0 >> 8)
+0351 22        1305            ret
+0352           1306   ;------------------------------------------------------------
+0352           1307   ;Allocation info for local variables in function 'main'
+0352           1308   ;------------------------------------------------------------
+0352           1309   ;v                         Allocated with name '_main_v_1_103'
+0352           1310   ;sign                      Allocated with name '_main_sign_1_103'
+0352           1311   ;half_period               Allocated with name '_main_half_period_1_103'
+0352           1312   ;zero_diff                 Allocated with name '_main_zero_diff_1_103'
+0352           1313   ;delay                     Allocated with name '_main_delay_1_103'
+0352           1314   ;VD                        Allocated to registers 
+0352           1315   ;buff                      Allocated with name '_main_buff_1_103'
+0352           1316   ;sloc0                     Allocated with name '_main_sloc0_1_0'
+0352           1317   ;sloc1                     Allocated with name '_main_sloc1_1_0'
+0352           1318   ;sloc2                     Allocated with name '_main_sloc2_1_0'
+0352           1319   ;String1                   Allocated with name '_main_String1_1_103'
+0352           1320   ;String2                   Allocated with name '_main_String2_1_103'
+0352           1321   ;------------------------------------------------------------
+0352           1322   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:288: void main (void) 
+0352           1323   ;        -----------------------------------------
+0352           1324   ;         function main
+0352           1325   ;        -----------------------------------------
+0352           1326   _main:
+0352           1327   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:301: LCD_4BIT();
+0352 120100    1328            lcall   _LCD_4BIT
+0355           1329   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:302: TIMER0_Init();
+0355 120100    1330            lcall   _TIMER0_Init
+0358           1331   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:304: waitms(500); // Give PuTTY a chance to start.
+0358 9001F4    1332            mov     dptr,#0x01F4
+035B 120100    1333            lcall   _waitms
+035E           1334   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:307: InitPinADC(1,6); // Configure P1.6 as analog input this is TEST
+035E 75C806    1335            mov     _InitPinADC_PARM_2,#0x06
+0361 758201    1336            mov     dpl,#0x01
+0364 120100    1337            lcall   _InitPinADC
+0367           1338   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:308: InitPinADC(1,7); // Configure P1.7 as analog input this is REF
+0367 75C807    1339            mov     _InitPinADC_PARM_2,#0x07
+036A 758201    1340            mov     dpl,#0x01
+036D 120100    1341            lcall   _InitPinADC
+0370           1342   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:309: InitADC();
+0370 120100    1343            lcall   _InitADC
+0373           1344   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:311: while (1)
+0373           1345   L018061?:
+0373           1346   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:313: ADC0MX=QFP32_MUX_P1_7;
+0373 75BB0D    1347            mov     _ADC0MX,#0x0D
+0376           1348   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:314: ADBUSY=1;
+0376 D2EC      1349            setb    _ADBUSY
+0378           1350   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:315: while (ADBUSY); // Wait for conversion to complete
+0378           1351   L018001?:
+0378 20ECD0    1352            jb      _ADBUSY,L018001?
+037B           1353   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:317: TL0=0;
+037B 758A00    1354            mov     _TL0,#0x00
+037E           1355   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:318: TH0=0;
+037E 758C00    1356            mov     _TH0,#0x00
+0381           1357   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:319: while (Get_ADC()!=0); // Wait for the signal to be zero
+0381           1358   L018004?:
+0381 120100    1359            lcall   _Get_ADC
+0384 E582      1360            mov     a,dpl
+0386 8583F0    1361            mov     b,dph
+0389 45F0      1362            orl     a,b
+038B 7001      1363            jnz     L018004?
+038D           1364   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:320: while (Get_ADC()==0); // Wait for the signal to be positive
+038D           1365   L018007?:
+038D 120100    1366            lcall   _Get_ADC
+0390 E582      1367            mov     a,dpl
+0392 8583F0    1368            mov     b,dph
+0395 45F0      1369            orl     a,b
+0397 6001      1370            jz      L018007?
+0399           1371   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:321: TR0=1; // Start the timer 0
+0399 D28C      1372            setb    _TR0
+039B           1373   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:322: while (Get_ADC()!=0); // Wait for the signal to be zero again
+039B           1374   L018010?:
+039B 120100    1375            lcall   _Get_ADC
+039E E582      1376            mov     a,dpl
+03A0 8583F0    1377            mov     b,dph
+03A3 45F0      1378            orl     a,b
+03A5 7001      1379            jnz     L018010?
+03A7           1380   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:323: TR0=0; // Stop timer 0
+03A7 C28C      1381            clr     _TR0
+03A9           1382   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:324: half_period=TH0*256.0+TL0; // The 16-bit number [TH0-TL0]
+03A9 858C82    1383            mov     dpl,_TH0
+03AC 120100    1384            lcall   ___uchar2fs
+03AF AA82      1385            mov     r2,dpl
+03B1 AB83      1386            mov     r3,dph
+03B3 ACF0      1387            mov     r4,b
+03B5 FD        1388            mov     r5,a
+03B6 C002      1389            push    ar2
+03B8 C003      1390            push    ar3
+03BA C004      1391            push    ar4
+03BC C005      1392            push    ar5
+03BE 900000    1393            mov     dptr,#0x0000
+03C1 75F080    1394            mov     b,#0x80
+03C4 7443      1395            mov     a,#0x43
+03C6 120100    1396            lcall   ___fsmul
+03C9 858270    1397            mov     _main_sloc0_1_0,dpl
+03CC 858371    1398            mov     (_main_sloc0_1_0 + 1),dph
+03CF 85F072    1399            mov     (_main_sloc0_1_0 + 2),b
+03D2 F573      1400            mov     (_main_sloc0_1_0 + 3),a
+03D4 E581      1401            mov     a,sp
+03D6 24FC      1402            add     a,#0xfc
+03D8 F581      1403            mov     sp,a
+03DA AE8A      1404            mov     r6,_TL0
+03DC 7F00      1405            mov     r7,#0x00
+03DE 8E82      1406            mov     dpl,r6
+03E0 8F83      1407            mov     dph,r7
+03E2 120100    1408            lcall   ___sint2fs
+03E5 AE82      1409            mov     r6,dpl
+03E7 AF83      1410            mov     r7,dph
+03E9 AAF0      1411            mov     r2,b
+03EB FB        1412            mov     r3,a
+03EC C006      1413            push    ar6
+03EE C007      1414            push    ar7
+03F0 C002      1415            push    ar2
+03F2 C003      1416            push    ar3
+03F4 857082    1417            mov     dpl,_main_sloc0_1_0
+03F7 857183    1418            mov     dph,(_main_sloc0_1_0 + 1)
+03FA 8572F0    1419            mov     b,(_main_sloc0_1_0 + 2)
+03FD E573      1420            mov     a,(_main_sloc0_1_0 + 3)
+03FF 120100    1421            lcall   ___fsadd
+0402 858240    1422            mov     _main_half_period_1_103,dpl
+0405 858341    1423            mov     (_main_half_period_1_103 + 1),dph
+0408 85F042    1424            mov     (_main_half_period_1_103 + 2),b
+040B F543      1425            mov     (_main_half_period_1_103 + 3),a
+040D E581      1426            mov     a,sp
+040F 24FC      1427            add     a,#0xfc
+0411 F581      1428            mov     sp,a
+0413           1429   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:326: delay = (int)(half_period/12.0); //this is how much time you want to delay
+0413 E4        1430            clr     a
+0414 C0E0      1431            push    acc
+0416 C0E0      1432            push    acc
+0418 7440      1433            mov     a,#0x40
+041A C0E0      1434            push    acc
+041C 7441      1435            mov     a,#0x41
+041E C0E0      1436            push    acc
+0420 854082    1437            mov     dpl,_main_half_period_1_103
+0423 854183    1438            mov     dph,(_main_half_period_1_103 + 1)
+0426 8542F0    1439            mov     b,(_main_half_period_1_103 + 2)
+0429 E543      1440            mov     a,(_main_half_period_1_103 + 3)
+042B 120100    1441            lcall   ___fsdiv
+042E AE82      1442            mov     r6,dpl
+0430 AF83      1443            mov     r7,dph
+0432 AAF0      1444            mov     r2,b
+0434 FB        1445            mov     r3,a
+0435 E581      1446            mov     a,sp
+0437 24FC      1447            add     a,#0xfc
+0439 F581      1448            mov     sp,a
+043B 8E82      1449            mov     dpl,r6
+043D 8F83      1450            mov     dph,r7
+043F 8AF0      1451            mov     b,r2
+0441 EB        1452            mov     a,r3
+0442 120100    1453            lcall   ___fs2sint
+0445 8582E0    1454            mov     _main_delay_1_103,dpl
+0448 8583E1    1455            mov     (_main_delay_1_103 + 1),dph
+044B           1456   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:328: while(Get_ADC()!=0); // Wait for the signal to be zero
+044B           1457   L018013?:
+044B 120100    1458            lcall   _Get_ADC
+044E E582      1459            mov     a,dpl
+0450 8583F0    1460            mov     b,dph
+0453 45F0      1461            orl     a,b
+0455 7001      1462            jnz     L018013?
+0457           1463   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:329: while(Get_ADC()==0); // Wait for the signal to be positive
+0457           1464   L018016?:
+0457 120100    1465            lcall   _Get_ADC
+045A E582      1466            mov     a,dpl
+045C 8583F0    1467            mov     b,dph
+045F 45F0      1468            orl     a,b
+0461 6001      1469            jz      L018016?
+0463           1470   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:330: if(delay<1000){
+0463 C3        1471            clr     c
+0464 E5E0      1472            mov     a,_main_delay_1_103
+0466 94E8      1473            subb    a,#0xE8
+0468 E5E1      1474            mov     a,(_main_delay_1_103 + 1)
+046A 6480      1475            xrl     a,#0x80
+046C 9483      1476            subb    a,#0x83
+046E E4        1477            clr     a
+046F 33        1478            rlc     a
+0470 FC        1479            mov     r4,a
+0471 6001      1480            jz      L018020?
+0473           1481   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:331: Timer3us(delay);
+0473 85E082    1482            mov     dpl,_main_delay_1_103
+0476 C004      1483            push    ar4
+0478 120100    1484            lcall   _Timer3us
+047B D004      1485            pop     ar4
+047D 8001      1486            sjmp    L018021?
+047F           1487   L018020?:
+047F           1488   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:334: waitms(delay/1000);
+047F 7500E8    1489            mov     __divsint_PARM_2,#0xE8
+0482 750103    1490            mov     (__divsint_PARM_2 + 1),#0x03
+0485 85E082    1491            mov     dpl,_main_delay_1_103
+0488 85E183    1492            mov     dph,(_main_delay_1_103 + 1)
+048B C004      1493            push    ar4
+048D 120100    1494            lcall   __divsint
+0490 120100    1495            lcall   _waitms
+0493 D004      1496            pop     ar4
+0495           1497   L018021?:
+0495           1498   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:336: v[0] = Volts_at_Pin(QFP32_MUX_P1_7); // meausre the peak value of ref
+0495 75820D    1499            mov     dpl,#0x0D
+0498 C004      1500            push    ar4
+049A 120100    1501            lcall   _Volts_at_Pin
+049D AD82      1502            mov     r5,dpl
+049F AE83      1503            mov     r6,dph
+04A1 AFF0      1504            mov     r7,b
+04A3 FA        1505            mov     r2,a
+04A4 D004      1506            pop     ar4
+04A6 8DA0      1507            mov     _main_v_1_103,r5
+04A8 8EA1      1508            mov     (_main_v_1_103 + 1),r6
+04AA 8FA2      1509            mov     (_main_v_1_103 + 2),r7
+04AC 8AA3      1510            mov     (_main_v_1_103 + 3),r2
+04AE           1511   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:338: while(Volts_at_Pin(QFP32_MUX_P1_6)!=0); // Wait for the signal to be zero
+04AE           1512   L018022?:
+04AE 75820C    1513            mov     dpl,#0x0C
+04B1 C004      1514            push    ar4
+04B3 120100    1515            lcall   _Volts_at_Pin
+04B6 AA82      1516            mov     r2,dpl
+04B8 AB83      1517            mov     r3,dph
+04BA ADF0      1518            mov     r5,b
+04BC FE        1519            mov     r6,a
+04BD D004      1520            pop     ar4
+04BF EA        1521            mov     a,r2
+04C0 4B        1522            orl     a,r3
+04C1 4D        1523            orl     a,r5
+04C2 8EF0      1524            mov     b,r6
+04C4 C2F7      1525            clr     b.7 ; Clear the sign bit
+04C6 45F0      1526            orl     a,b
+04C8 7001      1527            jnz     L018022?
+04CA           1528   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:339: while(Volts_at_Pin(QFP32_MUX_P1_6)==0); // Wait for the signal to be positive
+04CA           1529   L018025?:
+04CA 75820C    1530            mov     dpl,#0x0C
+04CD C004      1531            push    ar4
+04CF 120100    1532            lcall   _Volts_at_Pin
+04D2 AA82      1533            mov     r2,dpl
+04D4 AB83      1534            mov     r3,dph
+04D6 ADF0      1535            mov     r5,b
+04D8 FE        1536            mov     r6,a
+04D9 D004      1537            pop     ar4
+04DB EA        1538            mov     a,r2
+04DC 4B        1539            orl     a,r3
+04DD 4D        1540            orl     a,r5
+04DE 8EF0      1541            mov     b,r6
+04E0 C2F7      1542            clr     b.7 ; Clear the sign bit
+04E2 45F0      1543            orl     a,b
+04E4 6001      1544            jz      L018025?
+04E6           1545   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:340: if(delay<1000){
+04E6 EC        1546            mov     a,r4
+04E7 6001      1547            jz      L018029?
+04E9           1548   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:341: Timer3us(delay);
+04E9 85E082    1549            mov     dpl,_main_delay_1_103
+04EC 120100    1550            lcall   _Timer3us
+04EF 8001      1551            sjmp    L018030?
+04F1           1552   L018029?:
+04F1           1553   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:344: waitms(delay/1000);
+04F1 7500E8    1554            mov     __divsint_PARM_2,#0xE8
+04F4 750103    1555            mov     (__divsint_PARM_2 + 1),#0x03
+04F7 85E082    1556            mov     dpl,_main_delay_1_103
+04FA 85E183    1557            mov     dph,(_main_delay_1_103 + 1)
+04FD 120100    1558            lcall   __divsint
+0500 120100    1559            lcall   _waitms
+0503           1560   L018030?:
+0503           1561   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:346: v[1] = Volts_at_Pin(QFP32_MUX_P1_6);
+0503 75820C    1562            mov     dpl,#0x0C
+0506 120100    1563            lcall   _Volts_at_Pin
+0509 AA82      1564            mov     r2,dpl
+050B AB83      1565            mov     r3,dph
+050D ACF0      1566            mov     r4,b
+050F FD        1567            mov     r5,a
+0510 8AA4      1568            mov     (_main_v_1_103 + 0x0004),r2
+0512 8BA5      1569            mov     ((_main_v_1_103 + 0x0004) + 1),r3
+0514 8CA6      1570            mov     ((_main_v_1_103 + 0x0004) + 2),r4
+0516 8DA7      1571            mov     ((_main_v_1_103 + 0x0004) + 3),r5
+0518           1572   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:348: TH0 = 0, TL0 = 0;
+0518 758C00    1573            mov     _TH0,#0x00
+051B 758A00    1574            mov     _TL0,#0x00
+051E           1575   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:349: while (Volts_at_Pin(QFP32_MUX_P1_6)!=0 || Volts_at_Pin(QFP32_MUX_P1_7)!=0);
+051E           1576   L018032?:
+051E 75820C    1577            mov     dpl,#0x0C
+0521 120100    1578            lcall   _Volts_at_Pin
+0524 AA82      1579            mov     r2,dpl
+0526 AB83      1580            mov     r3,dph
+0528 ACF0      1581            mov     r4,b
+052A FD        1582            mov     r5,a
+052B EA        1583            mov     a,r2
+052C 4B        1584            orl     a,r3
+052D 4C        1585            orl     a,r4
+052E 8DF0      1586            mov     b,r5
+0530 C2F7      1587            clr     b.7 ; Clear the sign bit
+0532 45F0      1588            orl     a,b
+0534 7001      1589            jnz     L018032?
+0536 75820D    1590            mov     dpl,#0x0D
+0539 120100    1591            lcall   _Volts_at_Pin
+053C AA82      1592            mov     r2,dpl
+053E AB83      1593            mov     r3,dph
+0540 ACF0      1594            mov     r4,b
+0542 FD        1595            mov     r5,a
+0543 EA        1596            mov     a,r2
+0544 4B        1597            orl     a,r3
+0545 4C        1598            orl     a,r4
+0546 8DF0      1599            mov     b,r5
+0548 C2F7      1600            clr     b.7 ; Clear the sign bit
+054A 45F0      1601            orl     a,b
+054C 7001      1602            jnz     L018032?
+054E           1603   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:350: while (Volts_at_Pin(QFP32_MUX_P1_6)==0 && Volts_at_Pin(QFP32_MUX_P1_7)==0);
+054E           1604   L018036?:
+054E 75820C    1605            mov     dpl,#0x0C
+0551 120100    1606            lcall   _Volts_at_Pin
+0554 AA82      1607            mov     r2,dpl
+0556 AB83      1608            mov     r3,dph
+0558 ACF0      1609            mov     r4,b
+055A FD        1610            mov     r5,a
+055B EA        1611            mov     a,r2
+055C 4B        1612            orl     a,r3
+055D 4C        1613            orl     a,r4
+055E 8DF0      1614            mov     b,r5
+0560 C2F7      1615            clr     b.7 ; Clear the sign bit
+0562 45F0      1616            orl     a,b
+0564 7001      1617            jnz     L018038?
+0566 75820D    1618            mov     dpl,#0x0D
+0569 120100    1619            lcall   _Volts_at_Pin
+056C AA82      1620            mov     r2,dpl
+056E AB83      1621            mov     r3,dph
+0570 ACF0      1622            mov     r4,b
+0572 FD        1623            mov     r5,a
+0573 EA        1624            mov     a,r2
+0574 4B        1625            orl     a,r3
+0575 4C        1626            orl     a,r4
+0576 8DF0      1627            mov     b,r5
+0578 C2F7      1628            clr     b.7 ; Clear the sign bit
+057A 45F0      1629            orl     a,b
+057C 6001      1630            jz      L018036?
+057E           1631   L018038?:
+057E           1632   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:351: TR0 = 1;
+057E D28C      1633            setb    _TR0
+0580           1634   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:352: if(Volts_at_Pin(QFP32_MUX_P1_6)!=0){
+0580 75820C    1635            mov     dpl,#0x0C
+0583 120100    1636            lcall   _Volts_at_Pin
+0586 AA82      1637            mov     r2,dpl
+0588 AB83      1638            mov     r3,dph
+058A ACF0      1639            mov     r4,b
+058C FD        1640            mov     r5,a
+058D EA        1641            mov     a,r2
+058E 4B        1642            orl     a,r3
+058F 4C        1643            orl     a,r4
+0590 8DF0      1644            mov     b,r5
+0592 C2F7      1645            clr     b.7 ; Clear the sign bit
+0594 45F0      1646            orl     a,b
+0596 6001      1647            jz      L018046?
+0598           1648   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:353: sign = -1;
+0598 75F000    1649            mov     _main_sign_1_103,#0x00
+059B 75F100    1650            mov     (_main_sign_1_103 + 1),#0x00
+059E 75F280    1651            mov     (_main_sign_1_103 + 2),#0x80
+05A1 75F3BF    1652            mov     (_main_sign_1_103 + 3),#0xBF
+05A4           1653   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:354: while (Volts_at_Pin(QFP32_MUX_P1_7)==0);
+05A4           1654   L018039?:
+05A4 75820D    1655            mov     dpl,#0x0D
+05A7 120100    1656            lcall   _Volts_at_Pin
+05AA AE82      1657            mov     r6,dpl
+05AC AF83      1658            mov     r7,dph
+05AE AAF0      1659            mov     r2,b
+05B0 FB        1660            mov     r3,a
+05B1 EE        1661            mov     a,r6
+05B2 4F        1662            orl     a,r7
+05B3 4A        1663            orl     a,r2
+05B4 8BF0      1664            mov     b,r3
+05B6 C2F7      1665            clr     b.7 ; Clear the sign bit
+05B8 45F0      1666            orl     a,b
+05BA 7001      1667            jnz     L018047?
+05BC 8001      1668            sjmp    L018039?
+05BE           1669   L018046?:
+05BE           1670   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:357: sign = 1;
+05BE 75F000    1671            mov     _main_sign_1_103,#0x00
+05C1 75F100    1672            mov     (_main_sign_1_103 + 1),#0x00
+05C4 75F280    1673            mov     (_main_sign_1_103 + 2),#0x80
+05C7 75F33F    1674            mov     (_main_sign_1_103 + 3),#0x3F
+05CA           1675   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:358: while (Volts_at_Pin(QFP32_MUX_P1_6)==0);
+05CA           1676   L018042?:
+05CA 75820C    1677            mov     dpl,#0x0C
+05CD 120100    1678            lcall   _Volts_at_Pin
+05D0 AA82      1679            mov     r2,dpl
+05D2 AB83      1680            mov     r3,dph
+05D4 ACF0      1681            mov     r4,b
+05D6 FD        1682            mov     r5,a
+05D7 EA        1683            mov     a,r2
+05D8 4B        1684            orl     a,r3
+05D9 4C        1685            orl     a,r4
+05DA 8DF0      1686            mov     b,r5
+05DC C2F7      1687            clr     b.7 ; Clear the sign bit
+05DE 45F0      1688            orl     a,b
+05E0 6001      1689            jz      L018042?
+05E2           1690   L018047?:
+05E2           1691   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:360: TR0 = 0;
+05E2 C28C      1692            clr     _TR0
+05E4           1693   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:361: zero_diff=TH0*256.0+TL0; // meauring the time difference of the zero cross
+05E4 858C82    1694            mov     dpl,_TH0
+05E7 120100    1695            lcall   ___uchar2fs
+05EA AA82      1696            mov     r2,dpl
+05EC AB83      1697            mov     r3,dph
+05EE ACF0      1698            mov     r4,b
+05F0 FD        1699            mov     r5,a
+05F1 C002      1700            push    ar2
+05F3 C003      1701            push    ar3
+05F5 C004      1702            push    ar4
+05F7 C005      1703            push    ar5
+05F9 900000    1704            mov     dptr,#0x0000
+05FC 75F080    1705            mov     b,#0x80
+05FF 7443      1706            mov     a,#0x43
+0601 120100    1707            lcall   ___fsmul
+0604 858270    1708            mov     _main_sloc0_1_0,dpl
+0607 858371    1709            mov     (_main_sloc0_1_0 + 1),dph
+060A 85F072    1710            mov     (_main_sloc0_1_0 + 2),b
+060D F573      1711            mov     (_main_sloc0_1_0 + 3),a
+060F E581      1712            mov     a,sp
+0611 24FC      1713            add     a,#0xfc
+0613 F581      1714            mov     sp,a
+0615 AE8A      1715            mov     r6,_TL0
+0617 7F00      1716            mov     r7,#0x00
+0619 8E82      1717            mov     dpl,r6
+061B 8F83      1718            mov     dph,r7
+061D 120100    1719            lcall   ___sint2fs
+0620 AE82      1720            mov     r6,dpl
+0622 AF83      1721            mov     r7,dph
+0624 AAF0      1722            mov     r2,b
+0626 FB        1723            mov     r3,a
+0627 C006      1724            push    ar6
+0629 C007      1725            push    ar7
+062B C002      1726            push    ar2
+062D C003      1727            push    ar3
+062F 857082    1728            mov     dpl,_main_sloc0_1_0
+0632 857183    1729            mov     dph,(_main_sloc0_1_0 + 1)
+0635 8572F0    1730            mov     b,(_main_sloc0_1_0 + 2)
+0638 E573      1731            mov     a,(_main_sloc0_1_0 + 3)
+063A 120100    1732            lcall   ___fsadd
+063D 858290    1733            mov     _main_zero_diff_1_103,dpl
+0640 858391    1734            mov     (_main_zero_diff_1_103 + 1),dph
+0643 85F092    1735            mov     (_main_zero_diff_1_103 + 2),b
+0646 F593      1736            mov     (_main_zero_diff_1_103 + 3),a
+0648 E581      1737            mov     a,sp
+064A 24FC      1738            add     a,#0xfc
+064C F581      1739            mov     sp,a
+064E           1740   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:363: if(P0_2==0){
+064E 308220    1741            jnb     _P0_2,L018110?
+0651 020100    1742            ljmp    L018058?
+0654           1743   L018110?:
+0654           1744   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:364: if(P0_1==1){
+0654 2081A0    1745            jb      _P0_1,L018111?
+0657 020100    1746            ljmp    L018049?
+065A           1747   L018111?:
+065A           1748   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:365: printf ("\rf=%.2fHz, ",1.0/(half_period*24.0/72.0e6)); // convert the half period to HZ 
+065A C040      1749            push    _main_half_period_1_103
+065C C041      1750            push    (_main_half_period_1_103 + 1)
+065E C042      1751            push    (_main_half_period_1_103 + 2)
+0660 C043      1752            push    (_main_half_period_1_103 + 3)
+0662 900000    1753            mov     dptr,#0x0000
+0665 75F0C0    1754            mov     b,#0xC0
+0668 7441      1755            mov     a,#0x41
+066A 120100    1756            lcall   ___fsmul
+066D AE82      1757            mov     r6,dpl
+066F AF83      1758            mov     r7,dph
+0671 AAF0      1759            mov     r2,b
+0673 FB        1760            mov     r3,a
+0674 E581      1761            mov     a,sp
+0676 24FC      1762            add     a,#0xfc
+0678 F581      1763            mov     sp,a
+067A 7440      1764            mov     a,#0x40
+067C C0E0      1765            push    acc
+067E 7454      1766            mov     a,#0x54
+0680 C0E0      1767            push    acc
+0682 7489      1768            mov     a,#0x89
+0684 C0E0      1769            push    acc
+0686 744C      1770            mov     a,#0x4C
+0688 C0E0      1771            push    acc
+068A 8E82      1772            mov     dpl,r6
+068C 8F83      1773            mov     dph,r7
+068E 8AF0      1774            mov     b,r2
+0690 EB        1775            mov     a,r3
+0691 120100    1776            lcall   ___fsdiv
+0694 AA82      1777            mov     r2,dpl
+0696 AB83      1778            mov     r3,dph
+0698 ACF0      1779            mov     r4,b
+069A FD        1780            mov     r5,a
+069B E581      1781            mov     a,sp
+069D 24FC      1782            add     a,#0xfc
+069F F581      1783            mov     sp,a
+06A1 C002      1784            push    ar2
+06A3 C003      1785            push    ar3
+06A5 C004      1786            push    ar4
+06A7 C005      1787            push    ar5
+06A9 900000    1788            mov     dptr,#0x0000
+06AC 75F080    1789            mov     b,#0x80
+06AF 743F      1790            mov     a,#0x3F
+06B1 120100    1791            lcall   ___fsdiv
+06B4 858270    1792            mov     _main_sloc0_1_0,dpl
+06B7 858371    1793            mov     (_main_sloc0_1_0 + 1),dph
+06BA 85F072    1794            mov     (_main_sloc0_1_0 + 2),b
+06BD F573      1795            mov     (_main_sloc0_1_0 + 3),a
+06BF E581      1796            mov     a,sp
+06C1 24FC      1797            add     a,#0xfc
+06C3 F581      1798            mov     sp,a
+06C5 C070      1799            push    _main_sloc0_1_0
+06C7 C071      1800            push    (_main_sloc0_1_0 + 1)
+06C9 C072      1801            push    (_main_sloc0_1_0 + 2)
+06CB C073      1802            push    (_main_sloc0_1_0 + 3)
+06CD 7420      1803            mov     a,#__str_0
+06CF C0E0      1804            push    acc
+06D1 74C8      1805            mov     a,#(__str_0 >> 8)
+06D3 C0E0      1806            push    acc
+06D5 7480      1807            mov     a,#0x80
+06D7 C0E0      1808            push    acc
+06D9 120100    1809            lcall   _printf
+06DC E581      1810            mov     a,sp
+06DE 24F9      1811            add     a,#0xf9
+06E0 F581      1812            mov     sp,a
+06E2           1813   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:366: printf ("Test Voltage=%.2fV, Ref Voltage=%.2fV, Phase=%.2f degrees     ", v[0]*1.4142631, v[1]*1.4142631, (sign*((zero_diff*360.0)/(half_period*2.0)))); // convert peak to rsm 
+06E2 C090      1814            push    _main_zero_diff_1_103
+06E4 C091      1815            push    (_main_zero_diff_1_103 + 1)
+06E6 C092      1816            push    (_main_zero_diff_1_103 + 2)
+06E8 C093      1817            push    (_main_zero_diff_1_103 + 3)
+06EA 900000    1818            mov     dptr,#0x0000
+06ED 75F0B4    1819            mov     b,#0xB4
+06F0 7443      1820            mov     a,#0x43
+06F2 120100    1821            lcall   ___fsmul
+06F5 8582B0    1822            mov     _main_sloc1_1_0,dpl
+06F8 8583B1    1823            mov     (_main_sloc1_1_0 + 1),dph
+06FB 85F0B2    1824            mov     (_main_sloc1_1_0 + 2),b
+06FE F5B3      1825            mov     (_main_sloc1_1_0 + 3),a
+0700 E581      1826            mov     a,sp
+0702 24FC      1827            add     a,#0xfc
+0704 F581      1828            mov     sp,a
+0706 C040      1829            push    _main_half_period_1_103
+0708 C041      1830            push    (_main_half_period_1_103 + 1)
+070A C042      1831            push    (_main_half_period_1_103 + 2)
+070C C043      1832            push    (_main_half_period_1_103 + 3)
+070E 900000    1833            mov     dptr,#(0x00&0x00ff)
+0711 E4        1834            clr     a
+0712 F5F0      1835            mov     b,a
+0714 7440      1836            mov     a,#0x40
+0716 120100    1837            lcall   ___fsmul
+0719 AC82      1838            mov     r4,dpl
+071B AD83      1839            mov     r5,dph
+071D AAF0      1840            mov     r2,b
+071F FB        1841            mov     r3,a
+0720 E581      1842            mov     a,sp
+0722 24FC      1843            add     a,#0xfc
+0724 F581      1844            mov     sp,a
+0726 C004      1845            push    ar4
+0728 C005      1846            push    ar5
+072A C002      1847            push    ar2
+072C C003      1848            push    ar3
+072E 85B082    1849            mov     dpl,_main_sloc1_1_0
+0731 85B183    1850            mov     dph,(_main_sloc1_1_0 + 1)
+0734 85B2F0    1851            mov     b,(_main_sloc1_1_0 + 2)
+0737 E5B3      1852            mov     a,(_main_sloc1_1_0 + 3)
+0739 120100    1853            lcall   ___fsdiv
+073C AA82      1854            mov     r2,dpl
+073E AB83      1855            mov     r3,dph
+0740 ACF0      1856            mov     r4,b
+0742 FD        1857            mov     r5,a
+0743 E581      1858            mov     a,sp
+0745 24FC      1859            add     a,#0xfc
+0747 F581      1860            mov     sp,a
+0749 C002      1861            push    ar2
+074B C003      1862            push    ar3
+074D C004      1863            push    ar4
+074F C005      1864            push    ar5
+0751 85F082    1865            mov     dpl,_main_sign_1_103
+0754 85F183    1866            mov     dph,(_main_sign_1_103 + 1)
+0757 85F2F0    1867            mov     b,(_main_sign_1_103 + 2)
+075A E5F3      1868            mov     a,(_main_sign_1_103 + 3)
+075C 120100    1869            lcall   ___fsmul
+075F 8582B0    1870            mov     _main_sloc1_1_0,dpl
+0762 8583B1    1871            mov     (_main_sloc1_1_0 + 1),dph
+0765 85F0B2    1872            mov     (_main_sloc1_1_0 + 2),b
+0768 F5B3      1873            mov     (_main_sloc1_1_0 + 3),a
+076A E581      1874            mov     a,sp
+076C 24FC      1875            add     a,#0xfc
+076E F581      1876            mov     sp,a
+0770 C0A4      1877            push    (_main_v_1_103 + 0x0004)
+0772 C0A5      1878            push    ((_main_v_1_103 + 0x0004) + 1)
+0774 C0A6      1879            push    ((_main_v_1_103 + 0x0004) + 2)
+0776 C0A7      1880            push    ((_main_v_1_103 + 0x0004) + 3)
+0778 900693    1881            mov     dptr,#0x0693
+077B 75F0B5    1882            mov     b,#0xB5
+077E 743F      1883            mov     a,#0x3F
+0780 120100    1884            lcall   ___fsmul
+0783 8582F0    1885            mov     _main_sloc2_1_0,dpl
+0786 8583F1    1886            mov     (_main_sloc2_1_0 + 1),dph
+0789 85F0F2    1887            mov     (_main_sloc2_1_0 + 2),b
+078C F5F3      1888            mov     (_main_sloc2_1_0 + 3),a
+078E E581      1889            mov     a,sp
+0790 24FC      1890            add     a,#0xfc
+0792 F581      1891            mov     sp,a
+0794 C0A0      1892            push    _main_v_1_103
+0796 C0A1      1893            push    (_main_v_1_103 + 1)
+0798 C0A2      1894            push    (_main_v_1_103 + 2)
+079A C0A3      1895            push    (_main_v_1_103 + 3)
+079C 900693    1896            mov     dptr,#0x0693
+079F 75F0B5    1897            mov     b,#0xB5
+07A2 743F      1898            mov     a,#0x3F
+07A4 120100    1899            lcall   ___fsmul
+07A7 AC82      1900            mov     r4,dpl
+07A9 AD83      1901            mov     r5,dph
+07AB AAF0      1902            mov     r2,b
+07AD FB        1903            mov     r3,a
+07AE E581      1904            mov     a,sp
+07B0 24FC      1905            add     a,#0xfc
+07B2 F581      1906            mov     sp,a
+07B4 C0B0      1907            push    _main_sloc1_1_0
+07B6 C0B1      1908            push    (_main_sloc1_1_0 + 1)
+07B8 C0B2      1909            push    (_main_sloc1_1_0 + 2)
+07BA C0B3      1910            push    (_main_sloc1_1_0 + 3)
+07BC C0F0      1911            push    _main_sloc2_1_0
+07BE C0F1      1912            push    (_main_sloc2_1_0 + 1)
+07C0 C0F2      1913            push    (_main_sloc2_1_0 + 2)
+07C2 C0F3      1914            push    (_main_sloc2_1_0 + 3)
+07C4 C004      1915            push    ar4
+07C6 C005      1916            push    ar5
+07C8 C002      1917            push    ar2
+07CA C003      1918            push    ar3
+07CC 74A0      1919            mov     a,#__str_1
+07CE C0E0      1920            push    acc
+07D0 74C8      1921            mov     a,#(__str_1 >> 8)
+07D2 C0E0      1922            push    acc
+07D4 7480      1923            mov     a,#0x80
+07D6 C0E0      1924            push    acc
+07D8 120100    1925            lcall   _printf
+07DB E581      1926            mov     a,sp
+07DD 24F1      1927            add     a,#0xf1
+07DF F581      1928            mov     sp,a
+07E1           1929   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:367: sprintf(String1, "T=%.2fV R=%.2fV", v[0]*1.4142631, v[1]*1.4142631);
+07E1 C0A4      1930            push    (_main_v_1_103 + 0x0004)
+07E3 C0A5      1931            push    ((_main_v_1_103 + 0x0004) + 1)
+07E5 C0A6      1932            push    ((_main_v_1_103 + 0x0004) + 2)
+07E7 C0A7      1933            push    ((_main_v_1_103 + 0x0004) + 3)
+07E9 900693    1934            mov     dptr,#0x0693
+07EC 75F0B5    1935            mov     b,#0xB5
+07EF 743F      1936            mov     a,#0x3F
+07F1 120100    1937            lcall   ___fsmul
+07F4 8582F0    1938            mov     _main_sloc2_1_0,dpl
+07F7 8583F1    1939            mov     (_main_sloc2_1_0 + 1),dph
+07FA 85F0F2    1940            mov     (_main_sloc2_1_0 + 2),b
+07FD F5F3      1941            mov     (_main_sloc2_1_0 + 3),a
+07FF E581      1942            mov     a,sp
+0801 24FC      1943            add     a,#0xfc
+0803 F581      1944            mov     sp,a
+0805 C0A0      1945            push    _main_v_1_103
+0807 C0A1      1946            push    (_main_v_1_103 + 1)
+0809 C0A2      1947            push    (_main_v_1_103 + 2)
+080B C0A3      1948            push    (_main_v_1_103 + 3)
+080D 900693    1949            mov     dptr,#0x0693
+0810 75F0B5    1950            mov     b,#0xB5
+0813 743F      1951            mov     a,#0x3F
+0815 120100    1952            lcall   ___fsmul
+0818 AE82      1953            mov     r6,dpl
+081A AF83      1954            mov     r7,dph
+081C AAF0      1955            mov     r2,b
+081E FB        1956            mov     r3,a
+081F E581      1957            mov     a,sp
+0821 24FC      1958            add     a,#0xfc
+0823 F581      1959            mov     sp,a
+0825 C0F0      1960            push    _main_sloc2_1_0
+0827 C0F1      1961            push    (_main_sloc2_1_0 + 1)
+0829 C0F2      1962            push    (_main_sloc2_1_0 + 2)
+082B C0F3      1963            push    (_main_sloc2_1_0 + 3)
+082D C006      1964            push    ar6
+082F C007      1965            push    ar7
+0831 C002      1966            push    ar2
+0833 C003      1967            push    ar3
+0835 74E0      1968            mov     a,#__str_2
+0837 C0E0      1969            push    acc
+0839 74C8      1970            mov     a,#(__str_2 >> 8)
+083B C0E0      1971            push    acc
+083D 7480      1972            mov     a,#0x80
+083F C0E0      1973            push    acc
+0841 7440      1974            mov     a,#_main_String1_1_103
+0843 C0E0      1975            push    acc
+0845 74B5      1976            mov     a,#(_main_String1_1_103 >> 8)
+0847 C0E0      1977            push    acc
+0849 E4        1978            clr     a
+084A C0E0      1979            push    acc
+084C 120100    1980            lcall   _sprintf
+084F E581      1981            mov     a,sp
+0851 24F2      1982            add     a,#0xf2
+0853 F581      1983            mov     sp,a
+0855           1984   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:368: sprintf(String2, "F=%.0fHz P=%.1f   ",1.0/(half_period*24.0/72.0e6), (sign*((zero_diff*360.0)/(half_period*2.0)))); //convert time difference to phase different
+0855 C0B0      1985            push    _main_sloc1_1_0
+0857 C0B1      1986            push    (_main_sloc1_1_0 + 1)
+0859 C0B2      1987            push    (_main_sloc1_1_0 + 2)
+085B C0B3      1988            push    (_main_sloc1_1_0 + 3)
+085D C070      1989            push    _main_sloc0_1_0
+085F C071      1990            push    (_main_sloc0_1_0 + 1)
+0861 C072      1991            push    (_main_sloc0_1_0 + 2)
+0863 C073      1992            push    (_main_sloc0_1_0 + 3)
+0865 7460      1993            mov     a,#__str_3
+0867 C0E0      1994            push    acc
+0869 74C9      1995            mov     a,#(__str_3 >> 8)
+086B C0E0      1996            push    acc
+086D 7480      1997            mov     a,#0x80
+086F C0E0      1998            push    acc
+0871 7490      1999            mov     a,#_main_String2_1_103
+0873 C0E0      2000            push    acc
+0875 74B5      2001            mov     a,#(_main_String2_1_103 >> 8)
+0877 C0E0      2002            push    acc
+0879 E4        2003            clr     a
+087A C0E0      2004            push    acc
+087C 120100    2005            lcall   _sprintf
+087F E581      2006            mov     a,sp
+0881 24F2      2007            add     a,#0xf2
+0883 F581      2008            mov     sp,a
+0885           2009   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:369: LCDprint(String1, 1, 0);
+0885 75F801    2010            mov     _LCDprint_PARM_2,#0x01
+0888 C268      2011            clr     _LCDprint_PARM_3
+088A 90B540    2012            mov     dptr,#_main_String1_1_103
+088D 75F000    2013            mov     b,#0x00
+0890 120100    2014            lcall   _LCDprint
+0893           2015   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:370: LCDprint(String2, 2, 0);
+0893 75F802    2016            mov     _LCDprint_PARM_2,#0x02
+0896 C268      2017            clr     _LCDprint_PARM_3
+0898 90B590    2018            mov     dptr,#_main_String2_1_103
+089B 75F000    2019            mov     b,#0x00
+089E 120100    2020            lcall   _LCDprint
+08A1 020100    2021            ljmp    L018059?
+08A4           2022   L018049?:
+08A4           2023   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:373: printf ("\rf=%.2fHz, ",1.0/(half_period*24.0/72.0e6));
+08A4 C040      2024            push    _main_half_period_1_103
+08A6 C041      2025            push    (_main_half_period_1_103 + 1)
+08A8 C042      2026            push    (_main_half_period_1_103 + 2)
+08AA C043      2027            push    (_main_half_period_1_103 + 3)
+08AC 900000    2028            mov     dptr,#0x0000
+08AF 75F0C0    2029            mov     b,#0xC0
+08B2 7441      2030            mov     a,#0x41
+08B4 120100    2031            lcall   ___fsmul
+08B7 AA82      2032            mov     r2,dpl
+08B9 AB83      2033            mov     r3,dph
+08BB ACF0      2034            mov     r4,b
+08BD FD        2035            mov     r5,a
+08BE E581      2036            mov     a,sp
+08C0 24FC      2037            add     a,#0xfc
+08C2 F581      2038            mov     sp,a
+08C4 7440      2039            mov     a,#0x40
+08C6 C0E0      2040            push    acc
+08C8 7454      2041            mov     a,#0x54
+08CA C0E0      2042            push    acc
+08CC 7489      2043            mov     a,#0x89
+08CE C0E0      2044            push    acc
+08D0 744C      2045            mov     a,#0x4C
+08D2 C0E0      2046            push    acc
+08D4 8A82      2047            mov     dpl,r2
+08D6 8B83      2048            mov     dph,r3
+08D8 8CF0      2049            mov     b,r4
+08DA ED        2050            mov     a,r5
+08DB 120100    2051            lcall   ___fsdiv
+08DE AA82      2052            mov     r2,dpl
+08E0 AB83      2053            mov     r3,dph
+08E2 ACF0      2054            mov     r4,b
+08E4 FD        2055            mov     r5,a
+08E5 E581      2056            mov     a,sp
+08E7 24FC      2057            add     a,#0xfc
+08E9 F581      2058            mov     sp,a
+08EB C002      2059            push    ar2
+08ED C003      2060            push    ar3
+08EF C004      2061            push    ar4
+08F1 C005      2062            push    ar5
+08F3 900000    2063            mov     dptr,#0x0000
+08F6 75F080    2064            mov     b,#0x80
+08F9 743F      2065            mov     a,#0x3F
+08FB 120100    2066            lcall   ___fsdiv
+08FE AA82      2067            mov     r2,dpl
+0900 AB83      2068            mov     r3,dph
+0902 ACF0      2069            mov     r4,b
+0904 FD        2070            mov     r5,a
+0905 E581      2071            mov     a,sp
+0907 24FC      2072            add     a,#0xfc
+0909 F581      2073            mov     sp,a
+090B C002      2074            push    ar2
+090D C003      2075            push    ar3
+090F C004      2076            push    ar4
+0911 C005      2077            push    ar5
+0913 7420      2078            mov     a,#__str_0
+0915 C0E0      2079            push    acc
+0917 74C8      2080            mov     a,#(__str_0 >> 8)
+0919 C0E0      2081            push    acc
+091B 7480      2082            mov     a,#0x80
+091D C0E0      2083            push    acc
+091F 120100    2084            lcall   _printf
+0922 E581      2085            mov     a,sp
+0924 24F9      2086            add     a,#0xf9
+0926 F581      2087            mov     sp,a
+0928           2088   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:374: printf ("Test Voltage=%.2fV, Ref Voltage=%.2fV, Phase=%.2f degrees     ", v[0]*1.4142631, v[1]*1.4142631, (sign*((zero_diff*360.0)/(half_period*2.0))));
+0928 C090      2089            push    _main_zero_diff_1_103
+092A C091      2090            push    (_main_zero_diff_1_103 + 1)
+092C C092      2091            push    (_main_zero_diff_1_103 + 2)
+092E C093      2092            push    (_main_zero_diff_1_103 + 3)
+0930 900000    2093            mov     dptr,#0x0000
+0933 75F0B4    2094            mov     b,#0xB4
+0936 7443      2095            mov     a,#0x43
+0938 120100    2096            lcall   ___fsmul
+093B 8582F0    2097            mov     _main_sloc2_1_0,dpl
+093E 8583F1    2098            mov     (_main_sloc2_1_0 + 1),dph
+0941 85F0F2    2099            mov     (_main_sloc2_1_0 + 2),b
+0944 F5F3      2100            mov     (_main_sloc2_1_0 + 3),a
+0946 E581      2101            mov     a,sp
+0948 24FC      2102            add     a,#0xfc
+094A F581      2103            mov     sp,a
+094C C040      2104            push    _main_half_period_1_103
+094E C041      2105            push    (_main_half_period_1_103 + 1)
+0950 C042      2106            push    (_main_half_period_1_103 + 2)
+0952 C043      2107            push    (_main_half_period_1_103 + 3)
+0954 900000    2108            mov     dptr,#(0x00&0x00ff)
+0957 E4        2109            clr     a
+0958 F5F0      2110            mov     b,a
+095A 7440      2111            mov     a,#0x40
+095C 120100    2112            lcall   ___fsmul
+095F AE82      2113            mov     r6,dpl
+0961 AF83      2114            mov     r7,dph
+0963 AAF0      2115            mov     r2,b
+0965 FB        2116            mov     r3,a
+0966 E581      2117            mov     a,sp
+0968 24FC      2118            add     a,#0xfc
+096A F581      2119            mov     sp,a
+096C C006      2120            push    ar6
+096E C007      2121            push    ar7
+0970 C002      2122            push    ar2
+0972 C003      2123            push    ar3
+0974 85F082    2124            mov     dpl,_main_sloc2_1_0
+0977 85F183    2125            mov     dph,(_main_sloc2_1_0 + 1)
+097A 85F2F0    2126            mov     b,(_main_sloc2_1_0 + 2)
+097D E5F3      2127            mov     a,(_main_sloc2_1_0 + 3)
+097F 120100    2128            lcall   ___fsdiv
+0982 AA82      2129            mov     r2,dpl
+0984 AB83      2130            mov     r3,dph
+0986 ACF0      2131            mov     r4,b
+0988 FD        2132            mov     r5,a
+0989 E581      2133            mov     a,sp
+098B 24FC      2134            add     a,#0xfc
+098D F581      2135            mov     sp,a
+098F C002      2136            push    ar2
+0991 C003      2137            push    ar3
+0993 C004      2138            push    ar4
+0995 C005      2139            push    ar5
+0997 85F082    2140            mov     dpl,_main_sign_1_103
+099A 85F183    2141            mov     dph,(_main_sign_1_103 + 1)
+099D 85F2F0    2142            mov     b,(_main_sign_1_103 + 2)
+09A0 E5F3      2143            mov     a,(_main_sign_1_103 + 3)
+09A2 120100    2144            lcall   ___fsmul
+09A5 8582F0    2145            mov     _main_sloc2_1_0,dpl
+09A8 8583F1    2146            mov     (_main_sloc2_1_0 + 1),dph
+09AB 85F0F2    2147            mov     (_main_sloc2_1_0 + 2),b
+09AE F5F3      2148            mov     (_main_sloc2_1_0 + 3),a
+09B0 E581      2149            mov     a,sp
+09B2 24FC      2150            add     a,#0xfc
+09B4 F581      2151            mov     sp,a
+09B6 C0A4      2152            push    (_main_v_1_103 + 0x0004)
+09B8 C0A5      2153            push    ((_main_v_1_103 + 0x0004) + 1)
+09BA C0A6      2154            push    ((_main_v_1_103 + 0x0004) + 2)
+09BC C0A7      2155            push    ((_main_v_1_103 + 0x0004) + 3)
+09BE 900693    2156            mov     dptr,#0x0693
+09C1 75F0B5    2157            mov     b,#0xB5
+09C4 743F      2158            mov     a,#0x3F
+09C6 120100    2159            lcall   ___fsmul
+09C9 8582B0    2160            mov     _main_sloc1_1_0,dpl
+09CC 8583B1    2161            mov     (_main_sloc1_1_0 + 1),dph
+09CF 85F0B2    2162            mov     (_main_sloc1_1_0 + 2),b
+09D2 F5B3      2163            mov     (_main_sloc1_1_0 + 3),a
+09D4 E581      2164            mov     a,sp
+09D6 24FC      2165            add     a,#0xfc
+09D8 F581      2166            mov     sp,a
+09DA C0A0      2167            push    _main_v_1_103
+09DC C0A1      2168            push    (_main_v_1_103 + 1)
+09DE C0A2      2169            push    (_main_v_1_103 + 2)
+09E0 C0A3      2170            push    (_main_v_1_103 + 3)
+09E2 900693    2171            mov     dptr,#0x0693
+09E5 75F0B5    2172            mov     b,#0xB5
+09E8 743F      2173            mov     a,#0x3F
+09EA 120100    2174            lcall   ___fsmul
+09ED AC82      2175            mov     r4,dpl
+09EF AD83      2176            mov     r5,dph
+09F1 AAF0      2177            mov     r2,b
+09F3 FB        2178            mov     r3,a
+09F4 E581      2179            mov     a,sp
+09F6 24FC      2180            add     a,#0xfc
+09F8 F581      2181            mov     sp,a
+09FA C0F0      2182            push    _main_sloc2_1_0
+09FC C0F1      2183            push    (_main_sloc2_1_0 + 1)
+09FE C0F2      2184            push    (_main_sloc2_1_0 + 2)
+0A00 C0F3      2185            push    (_main_sloc2_1_0 + 3)
+0A02 C0B0      2186            push    _main_sloc1_1_0
+0A04 C0B1      2187            push    (_main_sloc1_1_0 + 1)
+0A06 C0B2      2188            push    (_main_sloc1_1_0 + 2)
+0A08 C0B3      2189            push    (_main_sloc1_1_0 + 3)
+0A0A C004      2190            push    ar4
+0A0C C005      2191            push    ar5
+0A0E C002      2192            push    ar2
+0A10 C003      2193            push    ar3
+0A12 74A0      2194            mov     a,#__str_1
+0A14 C0E0      2195            push    acc
+0A16 74C8      2196            mov     a,#(__str_1 >> 8)
+0A18 C0E0      2197            push    acc
+0A1A 7480      2198            mov     a,#0x80
+0A1C C0E0      2199            push    acc
+0A1E 120100    2200            lcall   _printf
+0A21 E581      2201            mov     a,sp
+0A23 24F1      2202            add     a,#0xf1
+0A25 F581      2203            mov     sp,a
+0A27           2204   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:375: sprintf(String1, "T=%.2fV R=%.2fV", v[0]*1.4142631, v[1]*1.4142631);
+0A27 C0A4      2205            push    (_main_v_1_103 + 0x0004)
+0A29 C0A5      2206            push    ((_main_v_1_103 + 0x0004) + 1)
+0A2B C0A6      2207            push    ((_main_v_1_103 + 0x0004) + 2)
+0A2D C0A7      2208            push    ((_main_v_1_103 + 0x0004) + 3)
+0A2F 900693    2209            mov     dptr,#0x0693
+0A32 75F0B5    2210            mov     b,#0xB5
+0A35 743F      2211            mov     a,#0x3F
+0A37 120100    2212            lcall   ___fsmul
+0A3A 8582B0    2213            mov     _main_sloc1_1_0,dpl
+0A3D 8583B1    2214            mov     (_main_sloc1_1_0 + 1),dph
+0A40 85F0B2    2215            mov     (_main_sloc1_1_0 + 2),b
+0A43 F5B3      2216            mov     (_main_sloc1_1_0 + 3),a
+0A45 E581      2217            mov     a,sp
+0A47 24FC      2218            add     a,#0xfc
+0A49 F581      2219            mov     sp,a
+0A4B C0A0      2220            push    _main_v_1_103
+0A4D C0A1      2221            push    (_main_v_1_103 + 1)
+0A4F C0A2      2222            push    (_main_v_1_103 + 2)
+0A51 C0A3      2223            push    (_main_v_1_103 + 3)
+0A53 900693    2224            mov     dptr,#0x0693
+0A56 75F0B5    2225            mov     b,#0xB5
+0A59 743F      2226            mov     a,#0x3F
+0A5B 120100    2227            lcall   ___fsmul
+0A5E AE82      2228            mov     r6,dpl
+0A60 AF83      2229            mov     r7,dph
+0A62 AAF0      2230            mov     r2,b
+0A64 FB        2231            mov     r3,a
+0A65 E581      2232            mov     a,sp
+0A67 24FC      2233            add     a,#0xfc
+0A69 F581      2234            mov     sp,a
+0A6B C0B0      2235            push    _main_sloc1_1_0
+0A6D C0B1      2236            push    (_main_sloc1_1_0 + 1)
+0A6F C0B2      2237            push    (_main_sloc1_1_0 + 2)
+0A71 C0B3      2238            push    (_main_sloc1_1_0 + 3)
+0A73 C006      2239            push    ar6
+0A75 C007      2240            push    ar7
+0A77 C002      2241            push    ar2
+0A79 C003      2242            push    ar3
+0A7B 74E0      2243            mov     a,#__str_2
+0A7D C0E0      2244            push    acc
+0A7F 74C8      2245            mov     a,#(__str_2 >> 8)
+0A81 C0E0      2246            push    acc
+0A83 7480      2247            mov     a,#0x80
+0A85 C0E0      2248            push    acc
+0A87 7440      2249            mov     a,#_main_String1_1_103
+0A89 C0E0      2250            push    acc
+0A8B 74B5      2251            mov     a,#(_main_String1_1_103 >> 8)
+0A8D C0E0      2252            push    acc
+0A8F E4        2253            clr     a
+0A90 C0E0      2254            push    acc
+0A92 120100    2255            lcall   _sprintf
+0A95 E581      2256            mov     a,sp
+0A97 24F2      2257            add     a,#0xf2
+0A99 F581      2258            mov     sp,a
+0A9B           2259   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:376: sprintf(String2, ".=%2.2fms P=%.1f  ",(1000*half_period*24.0/72.0e6), (sign*((zero_diff*360.0)/(half_period*2.0)))); 
+0A9B C040      2260            push    _main_half_period_1_103
+0A9D C041      2261            push    (_main_half_period_1_103 + 1)
+0A9F C042      2262            push    (_main_half_period_1_103 + 2)
+0AA1 C043      2263            push    (_main_half_period_1_103 + 3)
+0AA3 908000    2264            mov     dptr,#0x8000
+0AA6 75F0BB    2265            mov     b,#0xBB
+0AA9 7446      2266            mov     a,#0x46
+0AAB 120100    2267            lcall   ___fsmul
+0AAE AA82      2268            mov     r2,dpl
+0AB0 AB83      2269            mov     r3,dph
+0AB2 ACF0      2270            mov     r4,b
+0AB4 FD        2271            mov     r5,a
+0AB5 E581      2272            mov     a,sp
+0AB7 24FC      2273            add     a,#0xfc
+0AB9 F581      2274            mov     sp,a
+0ABB 7440      2275            mov     a,#0x40
+0ABD C0E0      2276            push    acc
+0ABF 7454      2277            mov     a,#0x54
+0AC1 C0E0      2278            push    acc
+0AC3 7489      2279            mov     a,#0x89
+0AC5 C0E0      2280            push    acc
+0AC7 744C      2281            mov     a,#0x4C
+0AC9 C0E0      2282            push    acc
+0ACB 8A82      2283            mov     dpl,r2
+0ACD 8B83      2284            mov     dph,r3
+0ACF 8CF0      2285            mov     b,r4
+0AD1 ED        2286            mov     a,r5
+0AD2 120100    2287            lcall   ___fsdiv
+0AD5 AA82      2288            mov     r2,dpl
+0AD7 AB83      2289            mov     r3,dph
+0AD9 ACF0      2290            mov     r4,b
+0ADB FD        2291            mov     r5,a
+0ADC E581      2292            mov     a,sp
+0ADE 24FC      2293            add     a,#0xfc
+0AE0 F581      2294            mov     sp,a
+0AE2 C0F0      2295            push    _main_sloc2_1_0
+0AE4 C0F1      2296            push    (_main_sloc2_1_0 + 1)
+0AE6 C0F2      2297            push    (_main_sloc2_1_0 + 2)
+0AE8 C0F3      2298            push    (_main_sloc2_1_0 + 3)
+0AEA C002      2299            push    ar2
+0AEC C003      2300            push    ar3
+0AEE C004      2301            push    ar4
+0AF0 C005      2302            push    ar5
+0AF2 74E0      2303            mov     a,#__str_4
+0AF4 C0E0      2304            push    acc
+0AF6 74C9      2305            mov     a,#(__str_4 >> 8)
+0AF8 C0E0      2306            push    acc
+0AFA 7480      2307            mov     a,#0x80
+0AFC C0E0      2308            push    acc
+0AFE 7490      2309            mov     a,#_main_String2_1_103
+0B00 C0E0      2310            push    acc
+0B02 74B5      2311            mov     a,#(_main_String2_1_103 >> 8)
+0B04 C0E0      2312            push    acc
+0B06 E4        2313            clr     a
+0B07 C0E0      2314            push    acc
+0B09 120100    2315            lcall   _sprintf
+0B0C E581      2316            mov     a,sp
+0B0E 24F2      2317            add     a,#0xf2
+0B10 F581      2318            mov     sp,a
+0B12           2319   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:377: LCDprint(String1, 1, 0);
+0B12 75F801    2320            mov     _LCDprint_PARM_2,#0x01
+0B15 C268      2321            clr     _LCDprint_PARM_3
+0B17 90B540    2322            mov     dptr,#_main_String1_1_103
+0B1A 75F000    2323            mov     b,#0x00
+0B1D 120100    2324            lcall   _LCDprint
+0B20           2325   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:378: LCDprint(String2, 2, 0);
+0B20 75F802    2326            mov     _LCDprint_PARM_2,#0x02
+0B23 C268      2327            clr     _LCDprint_PARM_3
+0B25 90B590    2328            mov     dptr,#_main_String2_1_103
+0B28 75F000    2329            mov     b,#0x00
+0B2B 120100    2330            lcall   _LCDprint
+0B2E 020100    2331            ljmp    L018059?
+0B31           2332   L018058?:
+0B31           2333   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:381: else if (P0_2==1){
+0B31 208220    2334            jb      _P0_2,L018112?
+0B34 020100    2335            ljmp    L018055?
+0B37           2336   L018112?:
+0B37           2337   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:382: if(P0_1==1){
+0B37 2081A0    2338            jb      _P0_1,L018113?
+0B3A 020100    2339            ljmp    L018052?
+0B3D           2340   L018113?:
+0B3D           2341   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:383: printf ("\rf=%.2fHz, ",1.0/(half_period*24.0/72.0e6));
+0B3D C040      2342            push    _main_half_period_1_103
+0B3F C041      2343            push    (_main_half_period_1_103 + 1)
+0B41 C042      2344            push    (_main_half_period_1_103 + 2)
+0B43 C043      2345            push    (_main_half_period_1_103 + 3)
+0B45 900000    2346            mov     dptr,#0x0000
+0B48 75F0C0    2347            mov     b,#0xC0
+0B4B 7441      2348            mov     a,#0x41
+0B4D 120100    2349            lcall   ___fsmul
+0B50 AA82      2350            mov     r2,dpl
+0B52 AB83      2351            mov     r3,dph
+0B54 ACF0      2352            mov     r4,b
+0B56 FD        2353            mov     r5,a
+0B57 E581      2354            mov     a,sp
+0B59 24FC      2355            add     a,#0xfc
+0B5B F581      2356            mov     sp,a
+0B5D 7440      2357            mov     a,#0x40
+0B5F C0E0      2358            push    acc
+0B61 7454      2359            mov     a,#0x54
+0B63 C0E0      2360            push    acc
+0B65 7489      2361            mov     a,#0x89
+0B67 C0E0      2362            push    acc
+0B69 744C      2363            mov     a,#0x4C
+0B6B C0E0      2364            push    acc
+0B6D 8A82      2365            mov     dpl,r2
+0B6F 8B83      2366            mov     dph,r3
+0B71 8CF0      2367            mov     b,r4
+0B73 ED        2368            mov     a,r5
+0B74 120100    2369            lcall   ___fsdiv
+0B77 AA82      2370            mov     r2,dpl
+0B79 AB83      2371            mov     r3,dph
+0B7B ACF0      2372            mov     r4,b
+0B7D FD        2373            mov     r5,a
+0B7E E581      2374            mov     a,sp
+0B80 24FC      2375            add     a,#0xfc
+0B82 F581      2376            mov     sp,a
+0B84 C002      2377            push    ar2
+0B86 C003      2378            push    ar3
+0B88 C004      2379            push    ar4
+0B8A C005      2380            push    ar5
+0B8C 900000    2381            mov     dptr,#0x0000
+0B8F 75F080    2382            mov     b,#0x80
+0B92 743F      2383            mov     a,#0x3F
+0B94 120100    2384            lcall   ___fsdiv
+0B97 8582F0    2385            mov     _main_sloc2_1_0,dpl
+0B9A 8583F1    2386            mov     (_main_sloc2_1_0 + 1),dph
+0B9D 85F0F2    2387            mov     (_main_sloc2_1_0 + 2),b
+0BA0 F5F3      2388            mov     (_main_sloc2_1_0 + 3),a
+0BA2 E581      2389            mov     a,sp
+0BA4 24FC      2390            add     a,#0xfc
+0BA6 F581      2391            mov     sp,a
+0BA8 C0F0      2392            push    _main_sloc2_1_0
+0BAA C0F1      2393            push    (_main_sloc2_1_0 + 1)
+0BAC C0F2      2394            push    (_main_sloc2_1_0 + 2)
+0BAE C0F3      2395            push    (_main_sloc2_1_0 + 3)
+0BB0 7420      2396            mov     a,#__str_0
+0BB2 C0E0      2397            push    acc
+0BB4 74C8      2398            mov     a,#(__str_0 >> 8)
+0BB6 C0E0      2399            push    acc
+0BB8 7480      2400            mov     a,#0x80
+0BBA C0E0      2401            push    acc
+0BBC 120100    2402            lcall   _printf
+0BBF E581      2403            mov     a,sp
+0BC1 24F9      2404            add     a,#0xf9
+0BC3 F581      2405            mov     sp,a
+0BC5           2406   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:384: printf ("Test Voltage=%.2fV, Ref Voltage=%.2fV, Phase=%.2f radian     ", v[0]*1.4142631, v[1]*1.4142631, (sign*((zero_diff*360.0)/(half_period*2.0)))/180);
+0BC5 C090      2407            push    _main_zero_diff_1_103
+0BC7 C091      2408            push    (_main_zero_diff_1_103 + 1)
+0BC9 C092      2409            push    (_main_zero_diff_1_103 + 2)
+0BCB C093      2410            push    (_main_zero_diff_1_103 + 3)
+0BCD 900000    2411            mov     dptr,#0x0000
+0BD0 75F0B4    2412            mov     b,#0xB4
+0BD3 7443      2413            mov     a,#0x43
+0BD5 120100    2414            lcall   ___fsmul
+0BD8 8582B0    2415            mov     _main_sloc1_1_0,dpl
+0BDB 8583B1    2416            mov     (_main_sloc1_1_0 + 1),dph
+0BDE 85F0B2    2417            mov     (_main_sloc1_1_0 + 2),b
+0BE1 F5B3      2418            mov     (_main_sloc1_1_0 + 3),a
+0BE3 E581      2419            mov     a,sp
+0BE5 24FC      2420            add     a,#0xfc
+0BE7 F581      2421            mov     sp,a
+0BE9 C040      2422            push    _main_half_period_1_103
+0BEB C041      2423            push    (_main_half_period_1_103 + 1)
+0BED C042      2424            push    (_main_half_period_1_103 + 2)
+0BEF C043      2425            push    (_main_half_period_1_103 + 3)
+0BF1 900000    2426            mov     dptr,#(0x00&0x00ff)
+0BF4 E4        2427            clr     a
+0BF5 F5F0      2428            mov     b,a
+0BF7 7440      2429            mov     a,#0x40
+0BF9 120100    2430            lcall   ___fsmul
+0BFC AC82      2431            mov     r4,dpl
+0BFE AD83      2432            mov     r5,dph
+0C00 AAF0      2433            mov     r2,b
+0C02 FB        2434            mov     r3,a
+0C03 E581      2435            mov     a,sp
+0C05 24FC      2436            add     a,#0xfc
+0C07 F581      2437            mov     sp,a
+0C09 C004      2438            push    ar4
+0C0B C005      2439            push    ar5
+0C0D C002      2440            push    ar2
+0C0F C003      2441            push    ar3
+0C11 85B082    2442            mov     dpl,_main_sloc1_1_0
+0C14 85B183    2443            mov     dph,(_main_sloc1_1_0 + 1)
+0C17 85B2F0    2444            mov     b,(_main_sloc1_1_0 + 2)
+0C1A E5B3      2445            mov     a,(_main_sloc1_1_0 + 3)
+0C1C 120100    2446            lcall   ___fsdiv
+0C1F AA82      2447            mov     r2,dpl
+0C21 AB83      2448            mov     r3,dph
+0C23 ACF0      2449            mov     r4,b
+0C25 FD        2450            mov     r5,a
+0C26 E581      2451            mov     a,sp
+0C28 24FC      2452            add     a,#0xfc
+0C2A F581      2453            mov     sp,a
+0C2C C002      2454            push    ar2
+0C2E C003      2455            push    ar3
+0C30 C004      2456            push    ar4
+0C32 C005      2457            push    ar5
+0C34 85F082    2458            mov     dpl,_main_sign_1_103
+0C37 85F183    2459            mov     dph,(_main_sign_1_103 + 1)
+0C3A 85F2F0    2460            mov     b,(_main_sign_1_103 + 2)
+0C3D E5F3      2461            mov     a,(_main_sign_1_103 + 3)
+0C3F 120100    2462            lcall   ___fsmul
+0C42 AA82      2463            mov     r2,dpl
+0C44 AB83      2464            mov     r3,dph
+0C46 ACF0      2465            mov     r4,b
+0C48 FD        2466            mov     r5,a
+0C49 E581      2467            mov     a,sp
+0C4B 24FC      2468            add     a,#0xfc
+0C4D F581      2469            mov     sp,a
+0C4F E4        2470            clr     a
+0C50 C0E0      2471            push    acc
+0C52 C0E0      2472            push    acc
+0C54 7434      2473            mov     a,#0x34
+0C56 C0E0      2474            push    acc
+0C58 7443      2475            mov     a,#0x43
+0C5A C0E0      2476            push    acc
+0C5C 8A82      2477            mov     dpl,r2
+0C5E 8B83      2478            mov     dph,r3
+0C60 8CF0      2479            mov     b,r4
+0C62 ED        2480            mov     a,r5
+0C63 120100    2481            lcall   ___fsdiv
+0C66 8582B0    2482            mov     _main_sloc1_1_0,dpl
+0C69 8583B1    2483            mov     (_main_sloc1_1_0 + 1),dph
+0C6C 85F0B2    2484            mov     (_main_sloc1_1_0 + 2),b
+0C6F F5B3      2485            mov     (_main_sloc1_1_0 + 3),a
+0C71 E581      2486            mov     a,sp
+0C73 24FC      2487            add     a,#0xfc
+0C75 F581      2488            mov     sp,a
+0C77 C0A4      2489            push    (_main_v_1_103 + 0x0004)
+0C79 C0A5      2490            push    ((_main_v_1_103 + 0x0004) + 1)
+0C7B C0A6      2491            push    ((_main_v_1_103 + 0x0004) + 2)
+0C7D C0A7      2492            push    ((_main_v_1_103 + 0x0004) + 3)
+0C7F 900693    2493            mov     dptr,#0x0693
+0C82 75F0B5    2494            mov     b,#0xB5
+0C85 743F      2495            mov     a,#0x3F
+0C87 120100    2496            lcall   ___fsmul
+0C8A 858270    2497            mov     _main_sloc0_1_0,dpl
+0C8D 858371    2498            mov     (_main_sloc0_1_0 + 1),dph
+0C90 85F072    2499            mov     (_main_sloc0_1_0 + 2),b
+0C93 F573      2500            mov     (_main_sloc0_1_0 + 3),a
+0C95 E581      2501            mov     a,sp
+0C97 24FC      2502            add     a,#0xfc
+0C99 F581      2503            mov     sp,a
+0C9B C0A0      2504            push    _main_v_1_103
+0C9D C0A1      2505            push    (_main_v_1_103 + 1)
+0C9F C0A2      2506            push    (_main_v_1_103 + 2)
+0CA1 C0A3      2507            push    (_main_v_1_103 + 3)
+0CA3 900693    2508            mov     dptr,#0x0693
+0CA6 75F0B5    2509            mov     b,#0xB5
+0CA9 743F      2510            mov     a,#0x3F
+0CAB 120100    2511            lcall   ___fsmul
+0CAE AC82      2512            mov     r4,dpl
+0CB0 AD83      2513            mov     r5,dph
+0CB2 AAF0      2514            mov     r2,b
+0CB4 FB        2515            mov     r3,a
+0CB5 E581      2516            mov     a,sp
+0CB7 24FC      2517            add     a,#0xfc
+0CB9 F581      2518            mov     sp,a
+0CBB C0B0      2519            push    _main_sloc1_1_0
+0CBD C0B1      2520            push    (_main_sloc1_1_0 + 1)
+0CBF C0B2      2521            push    (_main_sloc1_1_0 + 2)
+0CC1 C0B3      2522            push    (_main_sloc1_1_0 + 3)
+0CC3 C070      2523            push    _main_sloc0_1_0
+0CC5 C071      2524            push    (_main_sloc0_1_0 + 1)
+0CC7 C072      2525            push    (_main_sloc0_1_0 + 2)
+0CC9 C073      2526            push    (_main_sloc0_1_0 + 3)
+0CCB C004      2527            push    ar4
+0CCD C005      2528            push    ar5
+0CCF C002      2529            push    ar2
+0CD1 C003      2530            push    ar3
+0CD3 7420      2531            mov     a,#__str_5
+0CD5 C0E0      2532            push    acc
+0CD7 74CB      2533            mov     a,#(__str_5 >> 8)
+0CD9 C0E0      2534            push    acc
+0CDB 7480      2535            mov     a,#0x80
+0CDD C0E0      2536            push    acc
+0CDF 120100    2537            lcall   _printf
+0CE2 E581      2538            mov     a,sp
+0CE4 24F1      2539            add     a,#0xf1
+0CE6 F581      2540            mov     sp,a
+0CE8           2541   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:385: sprintf(String1, "T=%.2fV R=%4.2fV", v[0]*1.4142631, v[1]*1.4142631);
+0CE8 C0A4      2542            push    (_main_v_1_103 + 0x0004)
+0CEA C0A5      2543            push    ((_main_v_1_103 + 0x0004) + 1)
+0CEC C0A6      2544            push    ((_main_v_1_103 + 0x0004) + 2)
+0CEE C0A7      2545            push    ((_main_v_1_103 + 0x0004) + 3)
+0CF0 900693    2546            mov     dptr,#0x0693
+0CF3 75F0B5    2547            mov     b,#0xB5
+0CF6 743F      2548            mov     a,#0x3F
+0CF8 120100    2549            lcall   ___fsmul
+0CFB 858270    2550            mov     _main_sloc0_1_0,dpl
+0CFE 858371    2551            mov     (_main_sloc0_1_0 + 1),dph
+0D01 85F072    2552            mov     (_main_sloc0_1_0 + 2),b
+0D04 F573      2553            mov     (_main_sloc0_1_0 + 3),a
+0D06 E581      2554            mov     a,sp
+0D08 24FC      2555            add     a,#0xfc
+0D0A F581      2556            mov     sp,a
+0D0C C0A0      2557            push    _main_v_1_103
+0D0E C0A1      2558            push    (_main_v_1_103 + 1)
+0D10 C0A2      2559            push    (_main_v_1_103 + 2)
+0D12 C0A3      2560            push    (_main_v_1_103 + 3)
+0D14 900693    2561            mov     dptr,#0x0693
+0D17 75F0B5    2562            mov     b,#0xB5
+0D1A 743F      2563            mov     a,#0x3F
+0D1C 120100    2564            lcall   ___fsmul
+0D1F AE82      2565            mov     r6,dpl
+0D21 AF83      2566            mov     r7,dph
+0D23 AAF0      2567            mov     r2,b
+0D25 FB        2568            mov     r3,a
+0D26 E581      2569            mov     a,sp
+0D28 24FC      2570            add     a,#0xfc
+0D2A F581      2571            mov     sp,a
+0D2C C070      2572            push    _main_sloc0_1_0
+0D2E C071      2573            push    (_main_sloc0_1_0 + 1)
+0D30 C072      2574            push    (_main_sloc0_1_0 + 2)
+0D32 C073      2575            push    (_main_sloc0_1_0 + 3)
+0D34 C006      2576            push    ar6
+0D36 C007      2577            push    ar7
+0D38 C002      2578            push    ar2
+0D3A C003      2579            push    ar3
+0D3C 7460      2580            mov     a,#__str_6
+0D3E C0E0      2581            push    acc
+0D40 74CB      2582            mov     a,#(__str_6 >> 8)
+0D42 C0E0      2583            push    acc
+0D44 7480      2584            mov     a,#0x80
+0D46 C0E0      2585            push    acc
+0D48 7440      2586            mov     a,#_main_String1_1_103
+0D4A C0E0      2587            push    acc
+0D4C 74B5      2588            mov     a,#(_main_String1_1_103 >> 8)
+0D4E C0E0      2589            push    acc
+0D50 E4        2590            clr     a
+0D51 C0E0      2591            push    acc
+0D53 120100    2592            lcall   _sprintf
+0D56 E581      2593            mov     a,sp
+0D58 24F2      2594            add     a,#0xf2
+0D5A F581      2595            mov     sp,a
+0D5C           2596   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:386: sprintf(String2, "F=%.0fHz P=%.2fpi  ",1.0/(half_period*24.0/72.0e6), (sign*((zero_diff*360.0)/(half_period*2.0)))/180); 
+0D5C C0B0      2597            push    _main_sloc1_1_0
+0D5E C0B1      2598            push    (_main_sloc1_1_0 + 1)
+0D60 C0B2      2599            push    (_main_sloc1_1_0 + 2)
+0D62 C0B3      2600            push    (_main_sloc1_1_0 + 3)
+0D64 C0F0      2601            push    _main_sloc2_1_0
+0D66 C0F1      2602            push    (_main_sloc2_1_0 + 1)
+0D68 C0F2      2603            push    (_main_sloc2_1_0 + 2)
+0D6A C0F3      2604            push    (_main_sloc2_1_0 + 3)
+0D6C 74A0      2605            mov     a,#__str_7
+0D6E C0E0      2606            push    acc
+0D70 74CB      2607            mov     a,#(__str_7 >> 8)
+0D72 C0E0      2608            push    acc
+0D74 7480      2609            mov     a,#0x80
+0D76 C0E0      2610            push    acc
+0D78 7490      2611            mov     a,#_main_String2_1_103
+0D7A C0E0      2612            push    acc
+0D7C 74B5      2613            mov     a,#(_main_String2_1_103 >> 8)
+0D7E C0E0      2614            push    acc
+0D80 E4        2615            clr     a
+0D81 C0E0      2616            push    acc
+0D83 120100    2617            lcall   _sprintf
+0D86 E581      2618            mov     a,sp
+0D88 24F2      2619            add     a,#0xf2
+0D8A F581      2620            mov     sp,a
+0D8C           2621   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:387: LCDprint(String1, 1, 0);
+0D8C 75F801    2622            mov     _LCDprint_PARM_2,#0x01
+0D8F C268      2623            clr     _LCDprint_PARM_3
+0D91 90B540    2624            mov     dptr,#_main_String1_1_103
+0D94 75F000    2625            mov     b,#0x00
+0D97 120100    2626            lcall   _LCDprint
+0D9A           2627   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:388: LCDprint(String2, 2, 0);
+0D9A 75F802    2628            mov     _LCDprint_PARM_2,#0x02
+0D9D C268      2629            clr     _LCDprint_PARM_3
+0D9F 90B590    2630            mov     dptr,#_main_String2_1_103
+0DA2 75F000    2631            mov     b,#0x00
+0DA5 120100    2632            lcall   _LCDprint
+0DA8 020100    2633            ljmp    L018059?
+0DAB           2634   L018052?:
+0DAB           2635   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:391: printf ("\rf=%.2fHz, ",1.0/(half_period*24.0/72.0e6));
+0DAB C040      2636            push    _main_half_period_1_103
+0DAD C041      2637            push    (_main_half_period_1_103 + 1)
+0DAF C042      2638            push    (_main_half_period_1_103 + 2)
+0DB1 C043      2639            push    (_main_half_period_1_103 + 3)
+0DB3 900000    2640            mov     dptr,#0x0000
+0DB6 75F0C0    2641            mov     b,#0xC0
+0DB9 7441      2642            mov     a,#0x41
+0DBB 120100    2643            lcall   ___fsmul
+0DBE AA82      2644            mov     r2,dpl
+0DC0 AB83      2645            mov     r3,dph
+0DC2 ACF0      2646            mov     r4,b
+0DC4 FD        2647            mov     r5,a
+0DC5 E581      2648            mov     a,sp
+0DC7 24FC      2649            add     a,#0xfc
+0DC9 F581      2650            mov     sp,a
+0DCB 7440      2651            mov     a,#0x40
+0DCD C0E0      2652            push    acc
+0DCF 7454      2653            mov     a,#0x54
+0DD1 C0E0      2654            push    acc
+0DD3 7489      2655            mov     a,#0x89
+0DD5 C0E0      2656            push    acc
+0DD7 744C      2657            mov     a,#0x4C
+0DD9 C0E0      2658            push    acc
+0DDB 8A82      2659            mov     dpl,r2
+0DDD 8B83      2660            mov     dph,r3
+0DDF 8CF0      2661            mov     b,r4
+0DE1 ED        2662            mov     a,r5
+0DE2 120100    2663            lcall   ___fsdiv
+0DE5 AA82      2664            mov     r2,dpl
+0DE7 AB83      2665            mov     r3,dph
+0DE9 ACF0      2666            mov     r4,b
+0DEB FD        2667            mov     r5,a
+0DEC E581      2668            mov     a,sp
+0DEE 24FC      2669            add     a,#0xfc
+0DF0 F581      2670            mov     sp,a
+0DF2 C002      2671            push    ar2
+0DF4 C003      2672            push    ar3
+0DF6 C004      2673            push    ar4
+0DF8 C005      2674            push    ar5
+0DFA 900000    2675            mov     dptr,#0x0000
+0DFD 75F080    2676            mov     b,#0x80
+0E00 743F      2677            mov     a,#0x3F
+0E02 120100    2678            lcall   ___fsdiv
+0E05 AA82      2679            mov     r2,dpl
+0E07 AB83      2680            mov     r3,dph
+0E09 ACF0      2681            mov     r4,b
+0E0B FD        2682            mov     r5,a
+0E0C E581      2683            mov     a,sp
+0E0E 24FC      2684            add     a,#0xfc
+0E10 F581      2685            mov     sp,a
+0E12 C002      2686            push    ar2
+0E14 C003      2687            push    ar3
+0E16 C004      2688            push    ar4
+0E18 C005      2689            push    ar5
+0E1A 7420      2690            mov     a,#__str_0
+0E1C C0E0      2691            push    acc
+0E1E 74C8      2692            mov     a,#(__str_0 >> 8)
+0E20 C0E0      2693            push    acc
+0E22 7480      2694            mov     a,#0x80
+0E24 C0E0      2695            push    acc
+0E26 120100    2696            lcall   _printf
+0E29 E581      2697            mov     a,sp
+0E2B 24F9      2698            add     a,#0xf9
+0E2D F581      2699            mov     sp,a
+0E2F           2700   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:392: printf ("Test Voltage=%.2fV, Ref Voltage=%.2fV, Phase=%.2f radian     ", v[0]*1.4142631, v[1]*1.4142631, (sign*((zero_diff*360.0)/(half_period*2.0)))/180);
+0E2F C090      2701            push    _main_zero_diff_1_103
+0E31 C091      2702            push    (_main_zero_diff_1_103 + 1)
+0E33 C092      2703            push    (_main_zero_diff_1_103 + 2)
+0E35 C093      2704            push    (_main_zero_diff_1_103 + 3)
+0E37 900000    2705            mov     dptr,#0x0000
+0E3A 75F0B4    2706            mov     b,#0xB4
+0E3D 7443      2707            mov     a,#0x43
+0E3F 120100    2708            lcall   ___fsmul
+0E42 8582F0    2709            mov     _main_sloc2_1_0,dpl
+0E45 8583F1    2710            mov     (_main_sloc2_1_0 + 1),dph
+0E48 85F0F2    2711            mov     (_main_sloc2_1_0 + 2),b
+0E4B F5F3      2712            mov     (_main_sloc2_1_0 + 3),a
+0E4D E581      2713            mov     a,sp
+0E4F 24FC      2714            add     a,#0xfc
+0E51 F581      2715            mov     sp,a
+0E53 C040      2716            push    _main_half_period_1_103
+0E55 C041      2717            push    (_main_half_period_1_103 + 1)
+0E57 C042      2718            push    (_main_half_period_1_103 + 2)
+0E59 C043      2719            push    (_main_half_period_1_103 + 3)
+0E5B 900000    2720            mov     dptr,#(0x00&0x00ff)
+0E5E E4        2721            clr     a
+0E5F F5F0      2722            mov     b,a
+0E61 7440      2723            mov     a,#0x40
+0E63 120100    2724            lcall   ___fsmul
+0E66 AE82      2725            mov     r6,dpl
+0E68 AF83      2726            mov     r7,dph
+0E6A AAF0      2727            mov     r2,b
+0E6C FB        2728            mov     r3,a
+0E6D E581      2729            mov     a,sp
+0E6F 24FC      2730            add     a,#0xfc
+0E71 F581      2731            mov     sp,a
+0E73 C006      2732            push    ar6
+0E75 C007      2733            push    ar7
+0E77 C002      2734            push    ar2
+0E79 C003      2735            push    ar3
+0E7B 85F082    2736            mov     dpl,_main_sloc2_1_0
+0E7E 85F183    2737            mov     dph,(_main_sloc2_1_0 + 1)
+0E81 85F2F0    2738            mov     b,(_main_sloc2_1_0 + 2)
+0E84 E5F3      2739            mov     a,(_main_sloc2_1_0 + 3)
+0E86 120100    2740            lcall   ___fsdiv
+0E89 AA82      2741            mov     r2,dpl
+0E8B AB83      2742            mov     r3,dph
+0E8D ACF0      2743            mov     r4,b
+0E8F FD        2744            mov     r5,a
+0E90 E581      2745            mov     a,sp
+0E92 24FC      2746            add     a,#0xfc
+0E94 F581      2747            mov     sp,a
+0E96 C002      2748            push    ar2
+0E98 C003      2749            push    ar3
+0E9A C004      2750            push    ar4
+0E9C C005      2751            push    ar5
+0E9E 85F082    2752            mov     dpl,_main_sign_1_103
+0EA1 85F183    2753            mov     dph,(_main_sign_1_103 + 1)
+0EA4 85F2F0    2754            mov     b,(_main_sign_1_103 + 2)
+0EA7 E5F3      2755            mov     a,(_main_sign_1_103 + 3)
+0EA9 120100    2756            lcall   ___fsmul
+0EAC AA82      2757            mov     r2,dpl
+0EAE AB83      2758            mov     r3,dph
+0EB0 ACF0      2759            mov     r4,b
+0EB2 FD        2760            mov     r5,a
+0EB3 E581      2761            mov     a,sp
+0EB5 24FC      2762            add     a,#0xfc
+0EB7 F581      2763            mov     sp,a
+0EB9 E4        2764            clr     a
+0EBA C0E0      2765            push    acc
+0EBC C0E0      2766            push    acc
+0EBE 7434      2767            mov     a,#0x34
+0EC0 C0E0      2768            push    acc
+0EC2 7443      2769            mov     a,#0x43
+0EC4 C0E0      2770            push    acc
+0EC6 8A82      2771            mov     dpl,r2
+0EC8 8B83      2772            mov     dph,r3
+0ECA 8CF0      2773            mov     b,r4
+0ECC ED        2774            mov     a,r5
+0ECD 120100    2775            lcall   ___fsdiv
+0ED0 8582F0    2776            mov     _main_sloc2_1_0,dpl
+0ED3 8583F1    2777            mov     (_main_sloc2_1_0 + 1),dph
+0ED6 85F0F2    2778            mov     (_main_sloc2_1_0 + 2),b
+0ED9 F5F3      2779            mov     (_main_sloc2_1_0 + 3),a
+0EDB E581      2780            mov     a,sp
+0EDD 24FC      2781            add     a,#0xfc
+0EDF F581      2782            mov     sp,a
+0EE1 C0A4      2783            push    (_main_v_1_103 + 0x0004)
+0EE3 C0A5      2784            push    ((_main_v_1_103 + 0x0004) + 1)
+0EE5 C0A6      2785            push    ((_main_v_1_103 + 0x0004) + 2)
+0EE7 C0A7      2786            push    ((_main_v_1_103 + 0x0004) + 3)
+0EE9 900693    2787            mov     dptr,#0x0693
+0EEC 75F0B5    2788            mov     b,#0xB5
+0EEF 743F      2789            mov     a,#0x3F
+0EF1 120100    2790            lcall   ___fsmul
+0EF4 8582B0    2791            mov     _main_sloc1_1_0,dpl
+0EF7 8583B1    2792            mov     (_main_sloc1_1_0 + 1),dph
+0EFA 85F0B2    2793            mov     (_main_sloc1_1_0 + 2),b
+0EFD F5B3      2794            mov     (_main_sloc1_1_0 + 3),a
+0EFF E581      2795            mov     a,sp
+0F01 24FC      2796            add     a,#0xfc
+0F03 F581      2797            mov     sp,a
+0F05 C0A0      2798            push    _main_v_1_103
+0F07 C0A1      2799            push    (_main_v_1_103 + 1)
+0F09 C0A2      2800            push    (_main_v_1_103 + 2)
+0F0B C0A3      2801            push    (_main_v_1_103 + 3)
+0F0D 900693    2802            mov     dptr,#0x0693
+0F10 75F0B5    2803            mov     b,#0xB5
+0F13 743F      2804            mov     a,#0x3F
+0F15 120100    2805            lcall   ___fsmul
+0F18 AC82      2806            mov     r4,dpl
+0F1A AD83      2807            mov     r5,dph
+0F1C AAF0      2808            mov     r2,b
+0F1E FB        2809            mov     r3,a
+0F1F E581      2810            mov     a,sp
+0F21 24FC      2811            add     a,#0xfc
+0F23 F581      2812            mov     sp,a
+0F25 C0F0      2813            push    _main_sloc2_1_0
+0F27 C0F1      2814            push    (_main_sloc2_1_0 + 1)
+0F29 C0F2      2815            push    (_main_sloc2_1_0 + 2)
+0F2B C0F3      2816            push    (_main_sloc2_1_0 + 3)
+0F2D C0B0      2817            push    _main_sloc1_1_0
+0F2F C0B1      2818            push    (_main_sloc1_1_0 + 1)
+0F31 C0B2      2819            push    (_main_sloc1_1_0 + 2)
+0F33 C0B3      2820            push    (_main_sloc1_1_0 + 3)
+0F35 C004      2821            push    ar4
+0F37 C005      2822            push    ar5
+0F39 C002      2823            push    ar2
+0F3B C003      2824            push    ar3
+0F3D 7420      2825            mov     a,#__str_5
+0F3F C0E0      2826            push    acc
+0F41 74CB      2827            mov     a,#(__str_5 >> 8)
+0F43 C0E0      2828            push    acc
+0F45 7480      2829            mov     a,#0x80
+0F47 C0E0      2830            push    acc
+0F49 120100    2831            lcall   _printf
+0F4C E581      2832            mov     a,sp
+0F4E 24F1      2833            add     a,#0xf1
+0F50 F581      2834            mov     sp,a
+0F52           2835   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:393: sprintf(String1, "T=%.2fV R=%4.2fV", v[0]*1.4142631, v[1]*1.4142631);
+0F52 C0A4      2836            push    (_main_v_1_103 + 0x0004)
+0F54 C0A5      2837            push    ((_main_v_1_103 + 0x0004) + 1)
+0F56 C0A6      2838            push    ((_main_v_1_103 + 0x0004) + 2)
+0F58 C0A7      2839            push    ((_main_v_1_103 + 0x0004) + 3)
+0F5A 900693    2840            mov     dptr,#0x0693
+0F5D 75F0B5    2841            mov     b,#0xB5
+0F60 743F      2842            mov     a,#0x3F
+0F62 120100    2843            lcall   ___fsmul
+0F65 8582B0    2844            mov     _main_sloc1_1_0,dpl
+0F68 8583B1    2845            mov     (_main_sloc1_1_0 + 1),dph
+0F6B 85F0B2    2846            mov     (_main_sloc1_1_0 + 2),b
+0F6E F5B3      2847            mov     (_main_sloc1_1_0 + 3),a
+0F70 E581      2848            mov     a,sp
+0F72 24FC      2849            add     a,#0xfc
+0F74 F581      2850            mov     sp,a
+0F76 C0A0      2851            push    _main_v_1_103
+0F78 C0A1      2852            push    (_main_v_1_103 + 1)
+0F7A C0A2      2853            push    (_main_v_1_103 + 2)
+0F7C C0A3      2854            push    (_main_v_1_103 + 3)
+0F7E 900693    2855            mov     dptr,#0x0693
+0F81 75F0B5    2856            mov     b,#0xB5
+0F84 743F      2857            mov     a,#0x3F
+0F86 120100    2858            lcall   ___fsmul
+0F89 AE82      2859            mov     r6,dpl
+0F8B AF83      2860            mov     r7,dph
+0F8D AAF0      2861            mov     r2,b
+0F8F FB        2862            mov     r3,a
+0F90 E581      2863            mov     a,sp
+0F92 24FC      2864            add     a,#0xfc
+0F94 F581      2865            mov     sp,a
+0F96 C0B0      2866            push    _main_sloc1_1_0
+0F98 C0B1      2867            push    (_main_sloc1_1_0 + 1)
+0F9A C0B2      2868            push    (_main_sloc1_1_0 + 2)
+0F9C C0B3      2869            push    (_main_sloc1_1_0 + 3)
+0F9E C006      2870            push    ar6
+0FA0 C007      2871            push    ar7
+0FA2 C002      2872            push    ar2
+0FA4 C003      2873            push    ar3
+0FA6 7460      2874            mov     a,#__str_6
+0FA8 C0E0      2875            push    acc
+0FAA 74CB      2876            mov     a,#(__str_6 >> 8)
+0FAC C0E0      2877            push    acc
+0FAE 7480      2878            mov     a,#0x80
+0FB0 C0E0      2879            push    acc
+0FB2 7440      2880            mov     a,#_main_String1_1_103
+0FB4 C0E0      2881            push    acc
+0FB6 74B5      2882            mov     a,#(_main_String1_1_103 >> 8)
+0FB8 C0E0      2883            push    acc
+0FBA E4        2884            clr     a
+0FBB C0E0      2885            push    acc
+0FBD 120100    2886            lcall   _sprintf
+0FC0 E581      2887            mov     a,sp
+0FC2 24F2      2888            add     a,#0xf2
+0FC4 F581      2889            mov     sp,a
+0FC6           2890   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:394: sprintf(String2, "T=%2.1fms P=%.2fpi  ",(1000*half_period*24.0/72.0e6),(sign*((zero_diff*360.0)/(half_period*2.0)))/180); 
+0FC6 C040      2891            push    _main_half_period_1_103
+0FC8 C041      2892            push    (_main_half_period_1_103 + 1)
+0FCA C042      2893            push    (_main_half_period_1_103 + 2)
+0FCC C043      2894            push    (_main_half_period_1_103 + 3)
+0FCE 908000    2895            mov     dptr,#0x8000
+0FD1 75F0BB    2896            mov     b,#0xBB
+0FD4 7446      2897            mov     a,#0x46
+0FD6 120100    2898            lcall   ___fsmul
+0FD9 AA82      2899            mov     r2,dpl
+0FDB AB83      2900            mov     r3,dph
+0FDD ACF0      2901            mov     r4,b
+0FDF FD        2902            mov     r5,a
+0FE0 E581      2903            mov     a,sp
+0FE2 24FC      2904            add     a,#0xfc
+0FE4 F581      2905            mov     sp,a
+0FE6 7440      2906            mov     a,#0x40
+0FE8 C0E0      2907            push    acc
+0FEA 7454      2908            mov     a,#0x54
+0FEC C0E0      2909            push    acc
+0FEE 7489      2910            mov     a,#0x89
+0FF0 C0E0      2911            push    acc
+0FF2 744C      2912            mov     a,#0x4C
+0FF4 C0E0      2913            push    acc
+0FF6 8A82      2914            mov     dpl,r2
+0FF8 8B83      2915            mov     dph,r3
+0FFA 8CF0      2916            mov     b,r4
+0FFC ED        2917            mov     a,r5
+0FFD 120100    2918            lcall   ___fsdiv
+1000 AA82      2919            mov     r2,dpl
+1002 AB83      2920            mov     r3,dph
+1004 ACF0      2921            mov     r4,b
+1006 FD        2922            mov     r5,a
+1007 E581      2923            mov     a,sp
+1009 24FC      2924            add     a,#0xfc
+100B F581      2925            mov     sp,a
+100D C0F0      2926            push    _main_sloc2_1_0
+100F C0F1      2927            push    (_main_sloc2_1_0 + 1)
+1011 C0F2      2928            push    (_main_sloc2_1_0 + 2)
+1013 C0F3      2929            push    (_main_sloc2_1_0 + 3)
+1015 C002      2930            push    ar2
+1017 C003      2931            push    ar3
+1019 C004      2932            push    ar4
+101B C005      2933            push    ar5
+101D 74E0      2934            mov     a,#__str_8
+101F C0E0      2935            push    acc
+1021 74CB      2936            mov     a,#(__str_8 >> 8)
+1023 C0E0      2937            push    acc
+1025 7480      2938            mov     a,#0x80
+1027 C0E0      2939            push    acc
+1029 7490      2940            mov     a,#_main_String2_1_103
+102B C0E0      2941            push    acc
+102D 74B5      2942            mov     a,#(_main_String2_1_103 >> 8)
+102F C0E0      2943            push    acc
+1031 E4        2944            clr     a
+1032 C0E0      2945            push    acc
+1034 120100    2946            lcall   _sprintf
+1037 E581      2947            mov     a,sp
+1039 24F2      2948            add     a,#0xf2
+103B F581      2949            mov     sp,a
+103D           2950   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:395: LCDprint(String1, 1, 0);
+103D 75F801    2951            mov     _LCDprint_PARM_2,#0x01
+1040 C268      2952            clr     _LCDprint_PARM_3
+1042 90B540    2953            mov     dptr,#_main_String1_1_103
+1045 75F000    2954            mov     b,#0x00
+1048 120100    2955            lcall   _LCDprint
+104B           2956   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:396: LCDprint(String2, 2, 0);
+104B 75F802    2957            mov     _LCDprint_PARM_2,#0x02
+104E C268      2958            clr     _LCDprint_PARM_3
+1050 90B590    2959            mov     dptr,#_main_String2_1_103
+1053 75F000    2960            mov     b,#0x00
+1056 120100    2961            lcall   _LCDprint
+1059 8001      2962            sjmp    L018059?
+105B           2963   L018055?:
+105B           2964   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:402: LCDprint("nothing",1,0); 
+105B 75F801    2965            mov     _LCDprint_PARM_2,#0x01
+105E C268      2966            clr     _LCDprint_PARM_3
+1060 90CC20    2967            mov     dptr,#__str_9
+1063 75F080    2968            mov     b,#0x80
+1066 120100    2969            lcall   _LCDprint
+1069           2970   L018059?:
+1069           2971   ;        C:\Users\K\Desktop\courses\3rd Year term2\ELEC291\lab5\Lab5-NOBONUS.c:405: waitms(100);
+1069 900064    2972            mov     dptr,#0x0064
+106C 120100    2973            lcall   _waitms
+106F 020100    2974            ljmp    L018061?
+1072           2975            rseg R_CSEG
+1072           2976   
+0000           2977            rseg R_XINIT
+0000           2978   
+0000           2979            rseg R_CONST
+0000           2980   __str_0:
+0000 0D        2981            db 0x0D
+0001 663D252E  2982            db 'f=%.2fHz, '
+     3266487A
+     2C20
+000B 00        2983            db 0x00
+000C           2984   __str_1:
+000C 54657374  2985            db 'Test Voltage=%.2fV, Ref Voltage=%.2fV, Phase=%.2f degrees   '
+     20566F6C
+     74616765
+     3D252E32
+     66562C20
+     52656620
+     566F6C74
+     6167653D
+     252E3266
+     562C2050
+     68617365
+     3D252E32
+     66206465
+     67726565
+     73202020
+0048 2020      2986            db '  '
+004A 00        2987            db 0x00
+004B           2988   __str_2:
+004B 543D252E  2989            db 'T=%.2fV R=%.2fV'
+     32665620
+     523D252E
+     326656
+005A 00        2990            db 0x00
+005B           2991   __str_3:
+005B 463D252E  2992            db 'F=%.0fHz P=%.1f   '
+     3066487A
+     20503D25
+     2E316620
+     2020
+006D 00        2993            db 0x00
+006E           2994   __str_4:
+006E 2E3D2532  2995            db '.=%2.2fms P=%.1f  '
+     2E32666D
+     7320503D
+     252E3166
+     2020
+0080 00        2996            db 0x00
+0081           2997   __str_5:
+0081 54657374  2998            db 'Test Voltage=%.2fV, Ref Voltage=%.2fV, Phase=%.2f radian    '
+     20566F6C
+     74616765
+     3D252E32
+     66562C20
+     52656620
+     566F6C74
+     6167653D
+     252E3266
+     562C2050
+     68617365
+     3D252E32
+     66207261
+     6469616E
+     20202020
+00BD 20        2999            db ' '
+00BE 00        3000            db 0x00
+00BF           3001   __str_6:
+00BF 543D252E  3002            db 'T=%.2fV R=%4.2fV'
+     32665620
+     523D2534
+     2E326656
+00CF 00        3003            db 0x00
+00D0           3004   __str_7:
+00D0 463D252E  3005            db 'F=%.0fHz P=%.2fpi  '
+     3066487A
+     20503D25
+     2E326670
+     692020
+00E3 00        3006            db 0x00
+00E4           3007   __str_8:
+00E4 543D2532  3008            db 'T=%2.1fms P=%.2fpi  '
+     2E31666D
+     7320503D
+     252E3266
+     70692020
+00F8 00        3009            db 0x00
+00F9           3010   __str_9:
+00F9 6E6F7468  3011            db 'nothing'
+     696E67
+0100 00        3012            db 0x00
+0101           3013   
+0003           3014            CSEG
+0003           3015   
+0003           3016   end
