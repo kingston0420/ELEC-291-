@@ -1,5 +1,5 @@
 ELEC 291 Project2 
-Author: KINGSTON CHEN 25028549
+Author: KINGSTON CHEN
 
 
 Construction: I first constructed the pic32 microcontroller system with the bo230XS and use blinky to test the circuit work properly. 
