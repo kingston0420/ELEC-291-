@@ -1,0 +1,1 @@
+A C program and circuit that control DC motors with the microcontroller using optoisolators and MOSFETs.
